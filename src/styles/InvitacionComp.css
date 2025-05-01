@@ -1,0 +1,79 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+form button {
+  margin: 4px !important;
+}
+
+.sugerencias {
+  padding-left: 0;
+}
+
+.sugerencias li,
+.sugerencias h5 {
+  color: green;
+}
+
+.sugerencias li {
+  display: flex;
+  padding-left: 0;
+}
+
+.esError {
+  color: red
+}
+
+.byebye {
+  transform: translateY(calc(-50vh - 100%));
+  opacity: 0;
+  transition: all 2s;
+}
+
+@keyframes viewInv {
+  0% {
+    transform: translateY(50vh);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.aparecisteInv,
+.noAnimation {
+  color: white;
+  opacity: 1;
+  width: 100%;
+  max-width: 500px;
+}
+
+.aparecisteInv {
+  animation: viewInv 2s;
+}
+
+.modal-content li {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+
+.modal-content input {
+  display: flex;
+}
+
+.modal-content ul {
+  padding-left: 0;
+}
+
+.modal {
+  align-content: center;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: rgb(216, 213, 213);
+}
