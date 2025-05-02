@@ -6,15 +6,18 @@
 
 .portada {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-image: url('/src/assets/images/backPass.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     width: 100vw;
     height: 100vh;
+    max-width: 600px;
+    max-height: 800px;
     opacity: 1;
-    transition: opacity 1.5s ease;
+    transition: opacity 1s ease;
     border: 1px solid #F6E3BA;
     padding: 8px;
 }
@@ -32,11 +35,40 @@ h1 {
     font-size: 48px !important;
 }
 
-img {
-    max-width: 50%;
-    height: auto;
+.pasaporte-pattern {
+    max-width: 500px;
+    width: 100%;
+    justify-self: center;
 }
 
+.pasaporte-pattern span {
+    color: #F6E3BA;
+    font-size: 14px;
+    padding: 0 8px;
+}
+
+.pasaporte-pattern p {
+    color: #F6E3BA;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.pasaporte-pattern input:not([type=range]) {
+    color: #F6E3BA;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 0 4px;
+    box-sizing: border-box;
+}
+
+::placeholder {
+    font-weight: normal;
+    color: #F6E3BA;
+}
+
+.errorMsg {
+    border: 1px solid rgb(189, 87, 87);
+}
 
 input[type="range"] {
     --s: 80px;
@@ -68,13 +100,17 @@ input[type="range"]::-webkit-slider-thumb {
     transform: translateY(-47%);
     background: url('/src/assets/images/avion.png') no-repeat center/contain;
     border: 8px solid transparent;
-    border-image: url('/src/assets/images/nubes.png') 0 0 0 100% /1 48%/1 100;    
+    border-image: url('/src/assets/images/nubes.png') 0 0 0 100% /1 48.2%/1 100;
 }
 
-
 input[type="range"]::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
     height: var(--s);
+    width: var(--s);
+    aspect-ratio: 1;
+    transform: translateY(-47%);
     background: url('/src/assets/images/avion.png') no-repeat center/contain;
-    border: none;
-    border-image: linear-gradient(var(--_c) 0 0) 0 0 0 1/calc(50% - var(--l)/2) 0 calc(50% - var(--l)/2) 100vw/0 0 0 100vw;
+    border: 8px solid transparent;
+    border-image: url('/src/assets/images/nubes.png') 0 0 0 100% /1 48.2%/1 100;
 }

@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import supabase from '../supabaseClient';
 import '../styles/InvitacionComp.css';
 
-export const InvitacionComp = ({ telOk, formOk, listaInv, telInv, numStorage }) => {
+export const InvitacionComp = ({ telOk, formOk, numStorage, nickname }) => {
     const [grupoFlia, setGrupoFlia] = useState([]);
     const [nGrupo, setNGrupo] = useState(null);
     const [checkedItems, setCheckedItems] = useState({});
-
-    const nickname = localStorage.getItem('nickname'); // Obtener el nickname del localStorage
 
     useEffect(() => {
         const fetchGrupoYFamilia = async () => {

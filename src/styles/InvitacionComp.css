@@ -10,48 +10,33 @@ form button {
 
 .sugerencias {
   padding-left: 0;
+  position: absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 16px;
+  background-color: white;
+}
+
+.sugerencias ul {
+  padding: 0;
+  margin: 0;
 }
 
 .sugerencias li,
 .sugerencias h5 {
   color: green;
+  margin: 0;
 }
 
 .sugerencias li {
   display: flex;
   padding-left: 0;
+  margin: 16px 0;
 }
 
 .esError {
   color: red
-}
-
-.byebye {
-  transform: translateY(calc(-50vh - 100%));
-  opacity: 0;
-  transition: all 2s;
-}
-
-@keyframes viewInv {
-  0% {
-    transform: translateY(50vh);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
-.aparecisteInv,
-.noAnimation {
-  color: white;
-  opacity: 1;
-  width: 100%;
-  max-width: 500px;
-}
-
-.aparecisteInv {
-  animation: viewInv 2s;
 }
 
 .modal-content li {
