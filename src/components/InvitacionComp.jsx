@@ -84,7 +84,7 @@ export const InvitacionComp = ({ telOk, formOk, numStorage, nickname }) => {
     };
 
     return (
-        <div className={`${formOk} ${numStorage ? 'noAnimation' : 'aparecisteInv'}`}>
+        <>
             <div>Hola {nickname || 'querido invitado'}</div>
 
             <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -133,6 +133,6 @@ export const InvitacionComp = ({ telOk, formOk, numStorage, nickname }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };

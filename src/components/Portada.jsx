@@ -30,11 +30,11 @@ export const Portada = ({
 
   return (
     <div className={`portada ${invitadoValido && 'pasarPagina'} ${desaparecer}`} >
-      <div className='d-flex flex-column justify-content-around align-items-center text-center'>
+      <div className='container d-flex flex-column justify-content-around align-items-center text-center m-0'>
         <h1>Pasaporte</h1>
         <img src={mundoPassport} width='240' alt="Mundo Passport" />
         <div>
-          <p>¡Bienvenidos al viaje de nuestras vidas!</p>
+          <h2>¡Acompañanos al viaje de nuestras vidas!</h2>
           <FormComp
             inputText={inputText}
             setInputText={setInputText}

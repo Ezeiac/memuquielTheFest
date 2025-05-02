@@ -1,5 +1,6 @@
 .portada p,
-.portada h1 {
+h1,
+h2 {
     font-family: 'Courier New', Courier, monospace;
     color: #F6E3BA
 }
@@ -15,16 +16,22 @@
     width: 100vw;
     height: 100vh;
     max-width: 600px;
-    max-height: 800px;
     opacity: 1;
     transition: opacity 1s ease;
     border: 1px solid #F6E3BA;
     padding: 8px;
 }
 
+.portada img {
+    max-height: 25%;
+    width: auto;
+    max-width: 80%;
+}
+
 .portada>div {
     height: 100%;
     border: 1px solid #F6E3BA;
+    max-width: 100%;
 }
 
 .pasarPagina {
@@ -32,7 +39,7 @@
 }
 
 h1 {
-    font-size: 48px !important;
+    font-size: 72px !important;
 }
 
 .pasaporte-pattern {
@@ -57,8 +64,9 @@ h1 {
     color: #F6E3BA;
     font-size: 18px;
     font-weight: bold;
-    padding: 0 4px;
+    padding: 0 8px;
     box-sizing: border-box;
+    border-radius: 10rem;
 }
 
 ::placeholder {
@@ -66,8 +74,17 @@ h1 {
     color: #F6E3BA;
 }
 
+.pasaporte-pattern input:not([type=range], .errorMsg) {
+    border: 1px solid #F6E3BA;
+}
+
+
 .errorMsg {
     border: 1px solid rgb(189, 87, 87);
+}
+
+.marginH {
+    margin: 3vh 0;
 }
 
 input[type="range"] {
@@ -76,7 +93,8 @@ input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
     background: transparent;
-    width: 80%;
+    width: 80vw;
+    max-width: 400px;
     height: 10px;
     --l: 100%;
     height: 50px;
@@ -113,4 +131,65 @@ input[type="range"]::-moz-range-thumb {
     background: url('/src/assets/images/avion.png') no-repeat center/contain;
     border: 8px solid transparent;
     border-image: url('/src/assets/images/nubes.png') 0 0 0 100% /1 48.2%/1 100;
+}
+
+.boxSlider {
+    width: fit-content;
+    height: 50px;
+    justify-self: center;
+    overflow: hidden;    
+    border-radius: 50rem;
+    background-color: rgba(90, 90, 90, 0.3);
+}
+
+.slider-container {
+    position: relative;
+}
+
+.slider-container input {
+    margin: 0;
+}
+
+.slider-placeholder {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: #F6E3BA;
+    padding: 4px 8px;
+    border-radius: 8px;
+    pointer-events: none;
+    white-space: nowrap;
+    z-index: 8;
+}
+
+.slider-placeholder i {
+    display: inline-block;
+}
+
+@keyframes moveChevron {
+    0% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(6px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.slider-placeholder .bi {
+    color: #F6E3BA;
+    font-size: 25px;
+    animation: moveChevron 2s infinite;
+}
+
+
+@media (max-width: 991px) {
+    h1 {
+        font-size: 54px !important;
+    }
 }

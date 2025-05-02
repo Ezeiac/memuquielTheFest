@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Fuse from 'fuse.js';
 
 export const FormComp = ({
@@ -17,13 +17,13 @@ export const FormComp = ({
   setRecorrido
 }) => {
   const [hideElement, setHideElement] = useState('');
-  const [placeApellido, setPlaceApellido] = useState("Indique su apellido");
-  const [placeNombre, setPlaceNombre] = useState("Indique su nombre");
+  const [placeApellido, setPlaceApellido] = useState("Apellido / Surname");
+  const [placeNombre, setPlaceNombre] = useState("Nombre / Name");
   const [errorStyle, setErrorStyle] = useState("");
   const [sugerencias, setSugerencias] = useState([]);
   const [showSugerencias, setShowSugerencias] = useState(false);
+  const [tipoSugerencia, setTipoSugerencia] = useState('');
   const storageFN = localStorage.getItem('nombre');
-
 
   const handleSubmit = (event = null) => {
     if (event) event.preventDefault();
@@ -57,48 +57,67 @@ export const FormComp = ({
       user.apellido.toLowerCase() === inputText.toLowerCase()
     );
 
-    if (apellidoExacto.length === 0) {
-      setEsError('Verifica el apellido.');
-      setSugerencias([]);
-      setInvitadoValido(null);
-      setFormEnviado(false);
-      setShowSugerencias(true);
+    if (apellidoExacto.length > 0) {
+      const coincidenciaExacta = apellidoExacto.find(user =>
+        user.nombre.toLowerCase() === nombre.toLowerCase()
+      );
+
+      if (coincidenciaExacta) {
+        setInvitadoValido(coincidenciaExacta);
+        setEsError('');
+        setFormEnviado(true);
+        setShowSugerencias(false);
+
+        window.localStorage.setItem('apellido', inputText);
+        window.localStorage.setItem('nombre', nombre);
+        window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
+        return;
+      }
+
+      const fuseNombre = new Fuse(apellidoExacto, {
+        keys: ['nombre'],
+        threshold: 0.4,
+      });
+
+      const resultados = fuseNombre.search(nombre);
+
+      if (resultados.length > 0) {
+        const sugerenciasNombres = resultados.map(r => r.item.nombre);
+        const nombresUnicos = [...new Set(sugerenciasNombres)];
+        setSugerencias(nombresUnicos);
+        setTipoSugerencia('nombre');
+        setInvitadoValido(null);
+        setFormEnviado(false);
+        setShowSugerencias(true);
+      } else {
+        setSugerencias([]);
+        setEsError('No se encontraron nombres similares.');
+        setInvitadoValido(null);
+        setFormEnviado(false);
+        setShowSugerencias(false);
+      }
+
       return;
     }
 
-    const coincidenciaExacta = apellidoExacto.find(user =>
-      user.nombre.toLowerCase() === nombre.toLowerCase()
-    );
-
-    if (coincidenciaExacta) {
-      setInvitadoValido(coincidenciaExacta);
-      setEsError('');
-      setFormEnviado(true);
-      setShowSugerencias(false);
-
-      window.localStorage.setItem('apellido', inputText);
-      window.localStorage.setItem('nombre', nombre);
-      window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
-      return;
-    }
-
-    const fuse = new Fuse(apellidoExacto, {
-      keys: ['nombre'],
+    // Si el apellido no es exacto, sugerimos apellidos
+    const fuseApellido = new Fuse(invitado, {
+      keys: ['apellido'],
       threshold: 0.4,
     });
 
-    const resultados = fuse.search(nombre);
+    const resultadosApellido = fuseApellido.search(inputText);
+    const apellidosUnicos = [...new Set(resultadosApellido.map(r => r.item.apellido))];
 
-    if (resultados.length > 0) {
-      const sugerenciasFuzzy = resultados.map(r => r.item);
-      setSugerencias(sugerenciasFuzzy);
-      setEsError('');
+    if (apellidosUnicos.length > 0) {
+      setSugerencias(apellidosUnicos);
+      setTipoSugerencia('apellido');
       setInvitadoValido(null);
       setFormEnviado(false);
       setShowSugerencias(true);
     } else {
       setSugerencias([]);
-      setEsError('No se encontraron nombres similares.');
+      setEsError('No se encontraron apellidos similares.');
       setInvitadoValido(null);
       setFormEnviado(false);
       setShowSugerencias(false);
@@ -120,17 +139,29 @@ export const FormComp = ({
     }
   };
 
+  const inputRef = useRef(null);
+
+  const [width, setWidth] = useState('')
+  const [inputWidth, setInputWidth] = useState(0);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      setInputWidth(inputRef.current.offsetWidth);
+    }
+  }, [recorrido]);
+
+  const posicionLeft = ((inputWidth * recorrido) / 100) + 70 * (1 - recorrido / 100);
+  
+
   return (
-    <div className='container'>
+    <div>
       <form className='pasaporte-pattern' onSubmit={handleSubmit}>
         <div className='text-start'>
-          <div className='d-flex justify-content-around'>
+          <div className='marginH d-flex justify-content-around'>
             {(storageLN && storageFN)
-              ? <p>Bievenido {window.localStorage.getItem('nickname')}</p>
-
+              ? <p>Bienvenido {window.localStorage.getItem('nickname')}</p>
               : <div className='d-lg-flex'>
                 <div>
-                  <span>Nombre / Name</span><br />
                   <input
                     type="text"
                     name="nombre"
@@ -140,10 +171,10 @@ export const FormComp = ({
                     onChange={(e) => setNombre(e.target.value)}
                     minLength="4"
                     className={errorStyle}
+                    autoComplete='off'
                   />
                 </div>
                 <div>
-                  <span>Apellido / Surname</span><br />
                   <input
                     type="text"
                     name="apellido"
@@ -151,14 +182,16 @@ export const FormComp = ({
                     placeholder={placeApellido}
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
+                    minLength="4"
                     className={errorStyle}
+                    autoComplete='off'
                   />
                 </div>
-
               </div>
             }
           </div>
-          <div className='position-relative text-center'>
+          <div className='boxSlider'>
+          <div className='slider-container'>
             <input
               type="range"
               min="0"
@@ -166,31 +199,60 @@ export const FormComp = ({
               value={recorrido}
               onChange={verUso}
               disabled={formEnviado}
+              ref={inputRef}
             />
+            {!formEnviado && (
+              <div className="slider-placeholder animate-fade" style={
+                recorrido <= 100
+                  ? { left: `${posicionLeft}px` }
+                  : { display: 'none'}
+              }
+              >
+                <i className="bi bi-chevron-double-right"></i>
+              </div>
+            )}
+          </div>
           </div>
           {esError && <div className="esError">{esError}</div>}
         </div>
       </form>
 
+
       {showSugerencias && sugerencias.length > 0 && (
-        <div className="sugerencias">
-          <h5>¿Quisiste decir?</h5>
-          <ul>
-            {sugerencias.map((user, index) => (
-              <li
-                key={index}
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  setNombre(user.nombre);
-                  setInputText(user.apellido);
-                  setShowSugerencias(false);
-                  setEsError('');
-                }}
-              >
-                {user.nombre} {user.apellido}
-              </li>
-            ))}
-          </ul>
+        <div className="container modal1" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-body">
+                <div className="sugerencias">
+                  <div>
+                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowSugerencias(false)}>
+                    </button>
+                    <h5 className='mb-2'>¿Quisiste decir?</h5>
+                    <p>Selecciona una opcíon</p>
+                    <ul>
+                      {sugerencias.map((item, index) => (
+                        <li
+                          key={index}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            if (tipoSugerencia === 'apellido') {
+                              setInputText(item);
+                            } else if (tipoSugerencia === 'nombre') {
+                              setNombre(item);
+                            }
+                            setShowSugerencias(false);
+                            setEsError('');
+                          }}
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

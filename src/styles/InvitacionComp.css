@@ -3,19 +3,21 @@ form {
   flex-direction: column;
 }
 
-input,
+input:not([type=range]),
 form button {
   margin: 4px !important;
 }
 
 .sugerencias {
-  padding-left: 0;
-  position: absolute;
-  top:50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding: 4px;
+  background-image: url('/src/assets/images/backPass.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.sugerencias >div {
   padding: 16px;
-  background-color: white;
+  border: 1px solid #F6E3BA;
 }
 
 .sugerencias ul {
@@ -25,7 +27,7 @@ form button {
 
 .sugerencias li,
 .sugerencias h5 {
-  color: green;
+  color: #F6E3BA;
   margin: 0;
 }
 
@@ -33,6 +35,39 @@ form button {
   display: flex;
   padding-left: 0;
   margin: 16px 0;
+}
+
+.modal1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.modal1 .modal-content {
+  max-width: 80%;
+  justify-self: center;
+}
+
+.modal1 .modal-body {
+  border: 1px solid #F6E3BA;
+}
+
+.btn-close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: rgba(27, 27, 27, 0.26);
+  border-radius: 50%;
+  color: #F6E3BA;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+}
+
+.btn-close {
+  --bs-btn-close-bg: url('../assets/icons/close.svg')
 }
 
 .esError {

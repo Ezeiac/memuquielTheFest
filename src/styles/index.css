@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: #F6E3BA;
   background-color: #242424;
 
   font-synthesis: none;
@@ -37,6 +37,8 @@ h1 {
 #root {
   height: 100%;
   width: 100%;
+  max-width: 600px;
+  overflow: hidden;
 }
 
 .bg-blue {
