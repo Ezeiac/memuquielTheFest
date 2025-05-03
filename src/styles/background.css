@@ -1,0 +1,45 @@
+@font-face {
+    font-family: "rhyme-casual";
+    src: url('../assets/fonts/rhyme-casual.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  * {
+    font-family: "rhyme-casual", sans-serif;
+  }
+  
+
+
+.slider {
+    width: 100%;
+    max-width: 600px;
+    overflow: hidden;
+    position: absolute;
+    margin: auto;
+    margin-top: 24px
+  }
+  
+  .slide-track {
+    display: flex;
+    width: calc(100% * 2);
+    animation: scroll 20s linear infinite;
+  }
+  
+  .slide-track img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    flex-shrink: 0;
+  }
+    
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  

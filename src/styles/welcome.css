@@ -1,15 +1,13 @@
 .portada p,
-h1,
-h2 {
+.portada .h1,
+.portada .h2 {
     font-family: 'Courier New', Courier, monospace;
     color: #F6E3BA
 }
 
 .portada {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    bottom: 0;
     background-image: url('/src/assets/images/backPass.jpg');
     background-repeat: no-repeat;
     background-size: cover;
@@ -20,6 +18,7 @@ h2 {
     transition: opacity 1s ease;
     border: 1px solid #F6E3BA;
     padding: 8px;
+    z-index: 1;
 }
 
 .portada img {
@@ -38,7 +37,7 @@ h2 {
     opacity: 0;
 }
 
-h1 {
+.h1 {
     font-size: 72px !important;
 }
 
@@ -144,6 +143,7 @@ input[type="range"]::-moz-range-thumb {
 
 .slider-container {
     position: relative;
+    height: 50px;
 }
 
 .slider-container input {
@@ -189,7 +189,7 @@ input[type="range"]::-moz-range-thumb {
 
 
 @media (max-width: 991px) {
-    h1 {
+    .h1 {
         font-size: 54px !important;
     }
 }

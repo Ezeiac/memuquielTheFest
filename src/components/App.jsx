@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
+import { Routes, Route } from 'react-router-dom';
 import { InvitacionComp } from './InvitacionComp';
 import { Portada } from './Portada';
 import '../styles/App.css';
@@ -14,36 +15,24 @@ function UserList() {
   const [esError, setEsError] = useState('');
   const [recorrido, setRecorrido] = useState(0);
 
+  const estadosCompartidos = {
+    inputText, setInputText,
+    nombre, setNombre,
+    formEnviado, setFormEnviado,
+    invitadoValido, setInvitadoValido,
+    esError, setEsError,
+    invitado,
+    recorrido, setRecorrido
+  };
+
+
   if (error) return <div>Error al cargar los datos: {error.message}</div>;
   if (loading) return <div className='bg-blue'>Cargando...</div>;
 
   return (
     <>
-
-        <Portada
-          inputText={inputText}
-          setInputText={setInputText}
-          nombre={nombre}
-          setNombre={setNombre}
-          formEnviado={formEnviado}
-          setFormEnviado={setFormEnviado}
-          invitadoValido={invitadoValido}
-          setInvitadoValido={setInvitadoValido}
-          esError={esError}
-          setEsError={setEsError}
-          invitado={invitado}
-          recorrido={recorrido}
-          setRecorrido={setRecorrido}
-        />
-        
-        <InvitacionComp
-          telOk={invitadoValido}
-          formOk={formEnviado}
-          listaInv={invitado}
-          telInv={inputText}
-          numStorage={inputText}
-          nickname={nickname}
-        />
+      <Portada estados={estadosCompartidos} />
+      {invitadoValido && <InvitacionComp telOk={invitadoValido} nickname={invitadoValido.nickname} nombre={nombre}/>}
 
     </>
   );

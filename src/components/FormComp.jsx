@@ -23,6 +23,9 @@ export const FormComp = ({
   const [sugerencias, setSugerencias] = useState([]);
   const [showSugerencias, setShowSugerencias] = useState(false);
   const [tipoSugerencia, setTipoSugerencia] = useState('');
+  const inputRef = useRef(null);
+  const [inputWidth, setInputWidth] = useState(0);
+  const posicionLeft = ((inputWidth * recorrido) / 100) + 70 * (1 - recorrido / 100);
   const storageFN = localStorage.getItem('nombre');
 
   const handleSubmit = (event = null) => {
@@ -41,7 +44,7 @@ export const FormComp = ({
           requestAnimationFrame(animarRetroceso);
         };
         requestAnimationFrame(animarRetroceso);
-      }, 1000);
+      }, 400);
     }
 
     if (!inputText || !nombre || inputText.trim() === '' || nombre.trim() === '') {
@@ -139,18 +142,12 @@ export const FormComp = ({
     }
   };
 
-  const inputRef = useRef(null);
-
-  const [width, setWidth] = useState('')
-  const [inputWidth, setInputWidth] = useState(0);
-
   useEffect(() => {
     if (inputRef.current) {
       setInputWidth(inputRef.current.offsetWidth);
     }
   }, [recorrido]);
 
-  const posicionLeft = ((inputWidth * recorrido) / 100) + 70 * (1 - recorrido / 100);
   
 
   return (
