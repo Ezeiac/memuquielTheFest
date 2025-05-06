@@ -25,6 +25,7 @@ export const Portada = ({
       }, 1300);
     }
   }, [recorrido]);
+  
 
   return (
     <div className={`portada ${invitadoValido && 'pasarPagina'} ${desaparecer} position-absolute`} >
@@ -32,7 +33,7 @@ export const Portada = ({
         <p className='h1'>Pasaporte</p>
         <img src={mundoPassport} width='240' alt="Mundo Passport" />
         <div>
-          <p className='h2'>¡Acompañanos al viaje de nuestras vidas!</p>
+          <p className='h3'>¡Acompañanos al viaje de nuestras vidas!</p>
           <FormComp
             inputText={inputText}
             setInputText={setInputText}

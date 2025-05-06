@@ -12,6 +12,10 @@ body {
   align-items: center;
 }
 
+p {
+  font-size: 20px;
+}
+
 form input {
   background-color: rgba(128, 128, 128, 0.212);
   border: 0

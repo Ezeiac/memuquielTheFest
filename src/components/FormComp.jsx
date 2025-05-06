@@ -66,11 +66,13 @@ export const FormComp = ({
       );
 
       if (coincidenciaExacta) {
+        window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
+        
         setInvitadoValido(coincidenciaExacta);
         setEsError('');
         setFormEnviado(true);
         setShowSugerencias(false);
-
+  
         window.localStorage.setItem('apellido', inputText);
         window.localStorage.setItem('nombre', nombre);
         window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
@@ -103,7 +105,6 @@ export const FormComp = ({
       return;
     }
 
-    // Si el apellido no es exacto, sugerimos apellidos
     const fuseApellido = new Fuse(invitado, {
       keys: ['apellido'],
       threshold: 0.4,

@@ -1,0 +1,105 @@
+/* .textInv span {
+  font-size: 16px;
+}
+
+.textInv {
+  padding: 8px;
+  border: 1px solid black
+}
+
+.golden {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #e8b34b;
+  z-index: 0;
+  padding: 8px 4px;
+}
+
+.border-golden {
+  border: 1px solid black;
+  margin: 0 6px;
+}
+
+.golden::before {
+  content: '';
+  position: absolute;
+  left: 0px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='20' height='34' viewBox='0 0 20 34'>\
+<polygon points='0,0 20,17 0,34' fill='%23f0f0f0' />\
+</svg>");
+  background-repeat: repeat-y;
+  background-size: 12px 20px;
+}
+
+.golden::after {
+  content: '';
+  position: absolute;
+  right: -8px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  background-image: url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='20' height='34' viewBox='0 0 20 34'>\
+  <polygon points='20,0 0,17 20,34' fill='%23f0f0f0' />\
+  </svg>");  
+  background-repeat: repeat-y;
+  background-size: 12px 20px;
+} */
+
+@font-face {
+  font-family: 'Roboto Tarjeta';
+  src: url('../assets/fonts/RobotoMono.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.tarjeta .modal-content,
+.tarjeta .modal-header,
+.tarjeta .modal-footer {
+  background-color: black;
+  color: #E5E4E2;
+  border: 0;
+}
+
+.tarjeta * {
+  font-family: 'Roboto Tarjeta', monospace;
+  font-size: 16px;
+}
+
+
+.tarjeta .modal-header,
+.tarjeta .modal-footer,
+.tarjeta .modal-body  {
+  padding: 4px 16px;
+}
+
+.tarjeta .modal-footer span  {
+  margin: 0 0 4px !important;
+}
+
+.tarjeta .modal-body li div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  
+}
+
+.tarjeta .modal-footer button {
+  color: #E5E4E2;
+  border: 1px #E5E4E2 solid;
+  padding: 4px;
+  margin: 4px;
+}
+
+
+.tarjeta .modal-footer > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+}

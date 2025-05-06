@@ -5,20 +5,17 @@
     font-style: normal;
     font-display: swap;
   }
-  
-  * {
-    font-family: "rhyme-casual", sans-serif;
-  }
-  
 
-
+  
 .slider {
     width: 100%;
-    max-width: 600px;
+    max-width: 400px;
     overflow: hidden;
     position: absolute;
     margin: auto;
-    margin-top: 24px
+    top: 25%;
+    transform: translateY(-25%);
+    z-index: -1;
   }
   
   .slide-track {
