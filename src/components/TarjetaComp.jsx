@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback} from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { RoundedBox, Text } from '@react-three/drei';
 import { TextureLoader } from 'three';
@@ -8,6 +8,7 @@ import '../styles/tarjeta.css';
 import { Canvas } from '@react-three/fiber';
 import { useInView } from 'react-intersection-observer';
 import * as THREE from 'three';
+import pulsa from '../assets/icons/pulsa.png'
 
 
 function ImagenSobreTarjeta() {
@@ -26,9 +27,21 @@ export function TarjetaComp({ datosTarjeta }) {
 
   const [tarjetaSeccion, setTarjetaSeccion] = useState(false);
   const [scrollRotation, setScrollRotation] = useState(0);
-  
+
   const [activarAnimacion, setActivarAnimacion] = useState(false);
-  const rotarManual = () => scrollRotation ? setScrollRotation(0): setScrollRotation(3.14159)
+  const [chauText, setChauText] = useState(false)
+
+  const rotarManual = () => {
+    if (scrollRotation) {
+      setScrollRotation(0)
+    }
+    else {
+      setScrollRotation(3.14159)
+    }    
+    setChauText(true)
+  }
+
+
 
   const { ref: verAsistenciaRef, inView: isAsistenciaVisible, entry } = useInView({
     threshold: 0.9,
@@ -48,9 +61,12 @@ export function TarjetaComp({ datosTarjeta }) {
     }
 
     if (isFullyVisible || entry.boundingClientRect.y < 0) {
-      const visibleAmount = 1 - rect.top / windowHeight;
-      const rotation = Math.min(Math.max(visibleAmount * Math.PI * 3.2, 0), Math.PI);
-      setScrollRotation(rotation);
+      setScrollRotation(3.14159);
+
+      setTimeout(() => {
+        setChauText(true)
+      }, 5000);
+
     } else {
       setScrollRotation(0);
     }
@@ -64,7 +80,7 @@ export function TarjetaComp({ datosTarjeta }) {
   useEffect(() => {
     const texto = (e) => {
       if (e.paga === 'MediaTarjeta') {
-        return 'La tarjeta tiene un valor de\n$75.000 (considera que a partir\ndel 8 de julio se actualizará\npor inflación).\nMenores de 12 años solo deben\nconfirmar asistencia para\npreparar su menú.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cernanos.';
+        return 'La tarjeta tiene un valor de\n$75.000 (considerá que a partir\ndel 8 de julio se actualizará\npor inflación).\nMenores de 12 años solo deben\nconfirmar asistencia para\npreparar su menú.\nAl confirmar tu asistencia,\nencontrarás la cuenta para el pago\ne información sobre alojamientos\ncernanos.';
       } else if (e.paga === 'SoloFiesta') {
         return 'Premium pass!\nSolo debes confirmar asistencia\nhasta el día 8 de octubre.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cernanos.';
       } else if (e.paga === 'Alojamiento') {
@@ -76,8 +92,7 @@ export function TarjetaComp({ datosTarjeta }) {
 
 
   return (
-    <div style={{ width: '100%', height: '300px' }} ref={verAsistenciaRef}>
-      {/* El Canvas debería envolver Tarjeta3D para que los hooks funcionen correctamente */}
+    <div style={{ width: '100%', height: '300px', position: 'relative' }} ref={verAsistenciaRef} onClick={rotarManual}>
       <Canvas camera={{ position: [0, 0, 5], fov: 35 }}>
         <ambientLight intensity={1} />
         <directionalLight position={[4, 1.5, 10]} />
@@ -89,12 +104,12 @@ export function TarjetaComp({ datosTarjeta }) {
           activarAnimacion={activarAnimacion}
         />
       </Canvas>
-      <button onClick={rotarManual}>Rotar</button>
+      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona para voltear</p></div>
     </div>
   );
 }
 
-function Tarjeta3D({ scrollRotation, textoTarjeta, frente, datosTarjeta, activarAnimacion }) {
+function Tarjeta3D({ scrollRotation, textoTarjeta, frente, activarAnimacion }) {
   const meshRef = useRef();
 
   useFrame(() => {
@@ -109,7 +124,7 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, datosTarjeta, activar
 
   return (
     <group ref={meshRef}>
-      <RoundedBox args={[3.5, 2.2, 0.01]} radius={0.02} smoothness={4}>
+      <RoundedBox args={[3.5, 2.5, 0.01]} radius={0.02} smoothness={4}>
         <meshStandardMaterial color="black" metalness={0.9} roughness={0.3} />
       </RoundedBox>
 

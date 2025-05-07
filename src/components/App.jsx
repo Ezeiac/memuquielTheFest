@@ -25,15 +25,14 @@ function UserList() {
     recorrido, setRecorrido
   };
 
-
+  // Mostrar errores o loading
   if (error) return <div>Error al cargar los datos: {error.message}</div>;
   if (loading) return <div className='bg-blue'>Cargando...</div>;
 
   return (
     <>
       <Portada estados={estadosCompartidos} />
-      {invitadoValido && <InvitacionComp datosOk={invitadoValido} nickname={invitadoValido.nickname} nombre={nombre}/>}
-
+      {invitadoValido && <InvitacionComp datosOk={invitadoValido} nickname={invitadoValido.nickname} nombre={nombre} />}
     </>
   );
 }

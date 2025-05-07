@@ -54,6 +54,11 @@
     justify-self: center;
   }
 
+  .modal-content {
+    max-width: 400px;
+    justify-self: center;
+  }
+
   .modal1 .modal-body {
     border: 1px solid #F6E3BA;
   }
@@ -131,7 +136,7 @@
     bottom: 0;
     width: 20px;
     height: 100%;
-    background: radial-gradient(circle at 10px 10px, #f0f0f0 7px, transparent 6px);
+    background: radial-gradient(circle at 10px 10px, #CFB284 7px, transparent 6px);
     background-repeat: repeat-y;
     background-size: 20px 33px;
   }
@@ -194,13 +199,24 @@
     padding-right: 4px;
   }
 
-  .viaje {
+  .viaje:nth-of-type(1) {
+    grid-column: 4;
+    padding-right: 4px;
+  }
+
+  .viaje:nth-of-type(3) {
+    grid-column: 4;
+    padding-right: 4px;
+  }
+
+  /* .viaje {
     grid-column: 2 / -1;
     display: flex;
+
     width: 100%;
     padding: 0 4px;
     margin: 4px 0;
-  }
+  } */
 
   .viaje div {
     justify-items: start;
@@ -210,6 +226,7 @@
     height: 50px;
     width: 50px;
     margin: 0 2vw;
+    transform: translateX(-50%);
   }
 
   .destino {
@@ -242,6 +259,20 @@
     transform: translate(-50%, 0%);
   }
 
+  .pressTarjeta  {
+    justify-items: center;
+    animation: bounce2 2s ease infinite;
+    position: absolute;
+    left: 50%;
+    top: 90%;
+    opacity: 1;
+    transition: opacity 1s;
+  }
+
+  .pressTarjeta.chauText  {
+    opacity: 0;
+  }
+
   @keyframes bounce {
     70% {
       transform: translate(-50%, 0%);
@@ -269,6 +300,25 @@
 
     100% {
       transform: translate(-50%, 0);
+    }
+  }
+
+  @keyframes bounce2 {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+      transform: translate(-50%,0);
+    }
+
+    40% {
+      transform: translate(-50%,-10px);
+    }
+
+    60% {
+      transform: translate(-50%,-7.55px);
     }
   }
 
@@ -366,6 +416,12 @@
     border-radius: 50%;
     padding: 10px;
     border: 1px solid #DFCAA0;
+    transition: all 0.4s;
+  }
+
+  .asistir.enviadoBg {
+    background-color: rgba(76, 175, 80, 0.3);
+    border: 1px solid rgba(76, 175, 80, 0.8);
   }
 
   .flotante {
@@ -462,8 +518,7 @@
   .custom-modal-content {
     background-color: #fff;
     border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
+    max-width: 400px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     position: absolute;
     bottom: 0;
@@ -521,12 +576,8 @@
     text-align: center;
   }
 
-  .custom-modal-footer .platinum {
+  .platinum {
     background-color: black;
-  }
-
-  .custom-modal-footer .green {
-    background-color: #0f460f;
   }
 
   .switch-container {
@@ -639,7 +690,7 @@
   .modal-backdrop {
     z-index: 0;
   }
-  
+
   .otroAlojamiento .modal-dialog {
     top: 50%;
     transform: translateY(-50%) !important;
@@ -650,7 +701,7 @@
     background-color: #F6E3BA;
   }
 
-  .otroAlojamiento .modal-body > div {
+  .otroAlojamiento .modal-body>div {
     display: flex;
     justify-content: space-between;
   }
@@ -665,13 +716,13 @@
 
   .otroAlojamiento .modal-body div a {
     margin: 0 16px;
-  }  
+  }
 
   .otroAlojamiento .modal-body div div {
     width: 50%;
     text-align: end;
   }
-  
+
   .otroAlojamiento .modal-body p:last-child {
     margin-top: 16px;
   }
@@ -680,4 +731,96 @@
   .otroAlojamiento .modal-content {
     border-radius: 0;
   }
-  
+
+  .botonVoltear {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .acumulacionFotos img {
+    position: absolute;
+    transition: all 2s ease-out;
+    max-height: 280px;
+    width: auto;
+    top: 50%;
+    left: 50%;
+  }
+
+  .acumulacionFotos {
+    overflow: hidden;
+    height: 520px;
+    position: relative;
+    display: flex;
+    transition: transform 1s ease-in-out;
+  }
+
+  .acumulacionFotos .animacion {
+    transition: all 1.5s ease;
+  }
+
+  .acumulacionFotos button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 0;
+    background-color: transparent;
+    width: 45px;
+    height: 45px;
+  }
+
+  .acumulacionFotos button i {
+    font-size: 30px;
+    color: #CFB284;
+  }
+
+  .acumulacionFotos button i::before {
+    vertical-align: middle;
+    height: 38px;
+  }
+
+  .acumulacionFotos .left {
+    position: absolute;
+  }
+
+  .acumulacionFotos .right {
+    position: absolute;
+    right: 0;
+  }
+
+  .postal1 {
+    border: 8px solid white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    transform: rotate(-2deg);
+    transition: transform 0.3s ease;
+  }
+
+  .postal2 {
+    border: 6px solid #d2b48c;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    filter: sepia(0.2) contrast(1.1);
+    transform: rotate(3deg);
+    border-radius: 2px;
+  }
+
+  .postal3 {
+    border: 10px solid #f0f0f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+    transform: rotate(-1deg) translateY(2px);
+    transition: transform 0.4s ease;
+  }
+
+  .postal4 {
+    border: 5px dashed #ccc;
+    background-color: #fffbe6;
+    padding: 4px;
+    transform: rotate(2deg);
+    box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.25);
+    filter: brightness(0.95) contrast(1.05);
+  }
+
+  .cancionOk {
+    background-color: #2e7d32;
+  }

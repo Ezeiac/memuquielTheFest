@@ -1,0 +1,112 @@
+.flipdown {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.rotor-group:first-child {
+    margin: auto;
+    flex-basis: 100%;
+}
+
+.rotor-group {
+    padding: 0 !important;
+}
+
+#flipdown {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#flipdown .rotor-group {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#flipdown .rotor-group:first-child {
+    flex-basis: 100%;
+    justify-content: center;
+}
+
+.rotor-group-heading {
+    width: 100%;
+}
+
+.rotor,
+.rotor-top,
+.rotor-leaf-front {
+    background-color: #F6E3BA;
+    color: black;
+}
+
+.rotor-bottom,
+.rotor-leaf-rear,
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after,
+.flipdown.flipdown__theme-dark .rotor,
+.flipdown.flipdown__theme-dark .rotor-top,
+.flipdown.flipdown__theme-dark .rotor-leaf-front,
+.rotor,
+.rotor-leaf .flipped .rotor>div,
+.rotor>div::after,
+.flipdown.flipdown__theme-dark .rotor-bottom,
+.flipdown.flipdown__theme-dark .rotor-leaf-rear,
+.rotor-bottom,
+.rotor-leaf-rear,
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+.flipdown.flipdown__theme-dark .rotor-group:nth-child(n+2):nth-child(-n+3):after,
+.flipdown.flipdown__theme-dark .rotor,
+.flipdown.flipdown__theme-dark .rotor-top,
+.flipdown.flipdown__theme-dark .rotor-leaf-front {
+    background-color: #F6E3BA;
+    color: black;
+}
+
+.flipdown .rotor,
+.flipdown .rotor-leaf,
+.flipdown .rotor-leaf-front,
+.flipdown .rotor-leaf-rear,
+.flipdown .rotor:after,
+.flipdown .rotor-top,
+.flipdown .rotor-bottom {
+    width: 40px;
+}
+
+.flipdown .rotor-top,
+.flipdown .rotor-bottom {
+    width: 40px;
+}
+
+.flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before,
+.flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
+    left: 98%;
+}
+
+.rotor-group {
+    justify-content: center;
+}
+
+@media (max-width: 350px) {
+
+    .flipdown .rotor,
+    .flipdown .rotor-leaf,
+    .flipdown .rotor-leaf-front,
+    .flipdown .rotor-leaf-rear,
+    .flipdown .rotor:after,
+    .flipdown .rotor-top,
+    .flipdown .rotor-bottom {
+        width: 30px;
+    }
+}
+
+.flipdown.flipdown__theme-dark .rotor-group-heading:before {
+    font-size: 18px;
+}
+
+.flipdown .rotor {
+    font-size: 54px;
+}
