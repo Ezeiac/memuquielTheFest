@@ -33,6 +33,7 @@ function UserList() {
     <>
       <Portada estados={estadosCompartidos} />
       {invitadoValido && <InvitacionComp datosOk={invitadoValido} nickname={invitadoValido.nickname} nombre={nombre} />}
+      
     </>
   );
 }

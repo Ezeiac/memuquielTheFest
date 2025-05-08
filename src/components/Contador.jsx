@@ -16,7 +16,7 @@ export const Contador = () => {
             console.log("¡Cuenta regresiva terminada!");
           });
       } else {
-        console.warn("FlipDown o #flipdown no están listos.");
+        console.warn("Ver contador.");
       }
     }, 0);
 
@@ -26,7 +26,7 @@ export const Contador = () => {
 
   return (
     <div>
-      <div id="flipdown" className="flipdown"></div>
+      <div id="flipdown" className="flipdown pb-4"></div>
     </div>
   );
 };

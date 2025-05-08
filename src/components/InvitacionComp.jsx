@@ -6,7 +6,6 @@ import { Contador } from './Contador';
 import supabase from '../supabaseClient';
 import '../styles/InvitacionComp.css';
 import logo from '../assets/images/logo.png'
-import final from '../assets/images/fin.png'
 import boardingPlane from '../assets/images/boardingPlane.png'
 import verBarra from '../assets/images/verbarra.png'
 import mapa from '../assets/icons/mapa.png'
@@ -18,6 +17,9 @@ import fiesta from '../assets/icons/fiesta.png'
 import cena from '../assets/icons/cena.png'
 import confirm from '../assets/icons/confirmDate.png'
 import check from '../assets/icons/checkOk.gif'
+import temazo from '../assets/icons/temazo.gif'
+
+import { Postal } from './Postal';
 
 export const InvitacionComp = ({ datosOk }) => {
     const [grupoFlia, setGrupoFlia] = useState([]);
@@ -153,8 +155,8 @@ export const InvitacionComp = ({ datosOk }) => {
     useEffect(() => {
         const conId = consulta && consulta.duerme
         setvaDormir(conId)
-
     }, [consulta])
+
 
     const cuantaImg = useRef();
     const imagenesRef = useRef([]);
@@ -247,7 +249,7 @@ export const InvitacionComp = ({ datosOk }) => {
     }, [currentImageIndex])
 
     const imagenes = [
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/img9_v1fhqp.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/1.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/IMG-20250127-WA0036_rfowjb.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img7_jtwkvv.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img8_sfncp8.jpg',
@@ -260,7 +262,7 @@ export const InvitacionComp = ({ datosOk }) => {
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img10_ciqgbi.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img11_qmz35c.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img5_vgjbns.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img2_ktoppq.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746694954/1f64d4db_rjlijk.jpg'
     ];
 
     const [agregarTema, setAgregarTema] = useState('')
@@ -268,60 +270,56 @@ export const InvitacionComp = ({ datosOk }) => {
 
     const guardarCancion = async (cancionData) => {
         if (!datosOk?.id) return;
-    
+
         const { data, error: fetchError } = await supabase
             .from('ConfirmacionInv')
             .select('musica')
             .eq('id', datosOk.id)
             .single();
-    
+
         if (fetchError) {
             console.error('Error obteniendo música previa:', fetchError.message);
             return;
         }
-    
+
         const cancionesActuales = data?.musica || [];
-    
+
         const nuevasCanciones = [...cancionesActuales, cancionData];
-    
+
         const { error: updateError } = await supabase
             .from('ConfirmacionInv')
             .update({ musica: nuevasCanciones })
             .eq('id', datosOk.id);
-    
+
         if (updateError) {
             console.error('Error al guardar canción:', updateError.message);
         } else {
             console.log('Canción guardada con éxito.');
         }
     };
-    
+
     const handleCancion = async (e) => {
         e.preventDefault();
-    
+
         if (!agregarTema.trim()) return;
-    
+
         const temaData = {
             track: agregarTema.trim(),
             fecha: new Date().toISOString()
         };
-    
+
         await guardarCancion(temaData);
         setAgregarTema('');
-        
-        setTimeout(() => {
-            settemaAgregado(true)
-            
-        }, 300);
 
-        
+        settemaAgregado(true)
+
         setTimeout(() => {
             settemaAgregado(false)
-            
-        }, 1300);
+
+        }, 2300);
 
 
-    }; 
+    };
 
 
     return (
@@ -349,7 +347,7 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                 </section>
                 {/* PASAJE DE AVION */}
-                <section className='my-4'>
+                <section className='my-5'>
                     <div className="billete">
                         <img src={verBarra} width="64" className="barra" />
                         <div className="membPasaje">
@@ -385,10 +383,10 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                 </section>
                 {/* DESTINO */}
-                <section className='destino my-4'>
+                <section className='destino my-5'>
                     <Background />
-                    <div>
-                        <h2 className='h1'>Destino</h2>
+                    <div className='container'>
+                        <h1>Destino</h1>
                         <div className='direccion'>
                             <p className='h2'>Salón Villegas</p>
                             <p>San Martín 3729, Río Ceballos,
@@ -404,8 +402,8 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                 </section>
                 {/* ITINERARIO */}
-                <section className='my-4'>
-                    <h2 className='h1 text-center'>Itinerario</h2>
+                <section className='my-5'>
+                    <h1 className='text-center'>Itinerario</h1>
                     <div className='itinerario' ref={itinerarioRef}>
                         {itinerarioVisible && (
                             <>
@@ -444,7 +442,7 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                 </section>
                 {/* TARJETA */}
-                <section className='my-4'>
+                <section className='my-5'>
                     <div ref={popUp}>
                         <TarjetaComp
                             datosTarjeta={consulta}
@@ -453,7 +451,7 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                 </section>
                 {/* SLIDER FOTOS */}
-                <section className='my-4'>
+                <section className='my-5'>
                     <div ref={comienzaImg}>
                         <div className="acumulacionFotos" ref={cuantaImg}>
                             {imagenes.map((img, index) => (
@@ -470,43 +468,51 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                 </section>
                 {/* RELOJ DESCUENTO */}
-                <section className='my-4'>
-                    <h2 className='h1 text-center'>Ya se viene la<br />Memuquiel Fest</h2>
+                <section className='my-5'>
+                    <h1 className='text-center'>Ya se viene la<br />Memuquiel Fest</h1>
                     <Contador />
                 </section>
+                {/* MUSICA */}
+                <section className='container my-5'>
+                    <h1 className='text-center'>Bailemos de todo</h1>
+                    <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
+                    <form onSubmit={handleCancion} className='position-relative'>
+                        <input
+                            className='px-2'
+                            onChange={(e) => setAgregarTema(e.target.value)}
+                            value={agregarTema}
+                            placeholder='Indica nombre o link de tu canción'
+                        />
+                        <button type="submit" className='platinum'>Enviar</button>
+                        {temaAgregado && <img className='temazo' src={temazo} width='200' />}
+                    </form>
+                </section>
+                {/* VESTIMENTA */}
+                <section className='container my-5'>
+                    <h1 className='text-center'>Vestimenta</h1>
+                    <p>Elegante sport, así que podes llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitas algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
+                </section>
+                {/* FONDO MEDIO */}
+                <div className='backMiddle'><Background /></div>
+                {/* REGALO */}
+                <section className='container my-5'>
+                    <h1 className='text-center'>Regalos</h1>
+                    <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
+                    <p>Rocío González<br />ESXX XXXX XXXX XXXX XXXX</p>
+                    <p>Bizum: Manuel<br />+34 666 777 888</p>
+                </section>
+                {/* FINAL */}
+                <section className='final pb-2'>
+                <Postal datosTarjeta={consulta}/>
+                </section>
+
+
+                <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
+                    <button className={`asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'gelatina' : ''} ${!confirmSuccess && 'enviadoBg'}`} type="button" onClick={handleButtonClick}>
+                        <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
+                    </button>
+                </div>
             </>
-
-            {/* MUSICA */}
-            <section className='container my-4'>
-                <h2 className='h1 text-center'>Bailemos de todo</h2>
-                <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor </p>
-                <form onSubmit={handleCancion}>
-                    <input
-                    onChange={(e) => setAgregarTema(e.target.value)}
-                    value={agregarTema}
-                    />
-                    <button type="submit" className={`platinum ${temaAgregado && 'cancionOk'}`}>Cancion nueva</button>
-                </form>
-            </section>
-
-            {/* INFO EXTRA */}
-            <section className='container my-4'>
-                <h2 className='h1 text-center'>Vestimenta</h2>
-                <p>Elegante sport, asi que podes llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitas algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
-                <h2 className='h1 text-center'>Regalos</h2>
-                <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
-                <p>Rocío González<br />ESXX XXXX XXXX XXXX XXXX</p>
-                <p>Bizum: Manuel<br />+34 666 777 888</p>
-            </section>
-
-            <img src={final} width='200' />
-
-            <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
-                <button className={`asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'gelatina' : ''} ${!confirmSuccess && 'enviadoBg'}`} type="button" onClick={handleButtonClick}>
-                    <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
-                </button>
-            </div>
-
             <div className={`custom-modal-backdrop ${showModal ? 'mostrar' : 'ocultar'}`} onClick={handleCloseModal}>
                 <div className="custom-modal-content" onClick={(e) => e.stopPropagation()}>
                     <div className="custom-modal-header">
@@ -560,12 +566,14 @@ export const InvitacionComp = ({ datosOk }) => {
                         </ul>
                     </div>
                     <div className="custom-modal-footer">
+                        {consulta.paga == 'MediaTarjeta' &&
+                            <p className='mb-0'>Número de cuenta:</p>}
                         <span>
                             Si eres vegetariano o tienes alguna alergia/intolerancia, avísanos al momento de confirmar
                         </span>
                         <div>
                             <button className='platinum w-100' onClick={handleConfirm}>Confirmar asistencia</button>
-                            {!vaDormir || consulta.paga != 'Alojamiento' && vaDormir == null &&
+                            {(vaDormir === false || (consulta.paga !== 'Alojamiento' && vaDormir === true)) &&
                                 <button type="button" className="platinum w-100 mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Ver opciones de alojamiento
                                 </button>

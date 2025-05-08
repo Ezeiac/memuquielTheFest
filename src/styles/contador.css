@@ -73,12 +73,12 @@
 .flipdown .rotor:after,
 .flipdown .rotor-top,
 .flipdown .rotor-bottom {
-    width: 40px;
+    width: 30px;
 }
 
 .flipdown .rotor-top,
 .flipdown .rotor-bottom {
-    width: 40px;
+    width: 30px;
 }
 
 .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before,
@@ -104,9 +104,26 @@
 }
 
 .flipdown.flipdown__theme-dark .rotor-group-heading:before {
-    font-size: 18px;
+    font-size: 20px;
+    margin: 8px 0;
 }
 
 .flipdown .rotor {
-    font-size: 54px;
+    font-size: 40px;
+}
+
+.flipdown .rotor-group:nth-child(1) .rotor-group-heading:before {
+    content: 'Días'
+}
+
+.flipdown .rotor-group:nth-child(2) .rotor-group-heading:before {
+    content: 'Horas'
+}
+
+.flipdown .rotor-group:nth-child(3) .rotor-group-heading:before {
+    content: 'Minutos'
+}
+
+.flipdown .rotor-group:nth-child(4) .rotor-group-heading:before {
+    content: 'Segundos'
 }
