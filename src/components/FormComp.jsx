@@ -157,8 +157,8 @@ export const FormComp = ({
         <div className='text-start'>
           <div className='marginH d-flex justify-content-around'>
             {(storageLN && storageFN)
-              ? <p>Bienvenido {window.localStorage.getItem('nickname')}</p>
-              : <div className='d-lg-flex'>
+              ? <p>Hola de nuevo {window.localStorage.getItem('nickname')}</p>
+              : <div>
                 <div>
                   <input
                     type="text"
@@ -225,8 +225,7 @@ export const FormComp = ({
                   <div>
                     <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowSugerencias(false)}>
                     </button>
-                    <h5 className='mb-2'>¿Quisiste decir?</h5>
-                    <p>Selecciona una opcíon</p>
+                    <h5 className='mb-2'>Quisiste decir:</h5>
                     <ul>
                       {sugerencias.map((item, index) => (
                         <li

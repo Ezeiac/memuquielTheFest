@@ -7,11 +7,10 @@ import girar from '../assets/images/360.png';
 import RockSalt from '../assets/fonts/RockSalt.ttf';
 import '../styles/tarjeta.css';
 import { Canvas, } from '@react-three/fiber';
-import * as THREE from 'three';
 
-export const Postal = ({datosTarjeta}) => {
+export const Postal = ({ datosTarjeta }) => {
     const [textoTarjeta, setTextoTarjeta] = useState('');
-
+    
     function ImagenSobreTarjeta() {
         const texture = useLoader(TextureLoader, postal);
         return (
@@ -21,16 +20,26 @@ export const Postal = ({datosTarjeta}) => {
             </mesh>
         );
     }
+    
+    useEffect(() => {
+        setTextoTarjeta(`${datosTarjeta.nickname},\ngracias por\nacompañaros en\nesta aventura! ❤️`);
+    }, [datosTarjeta]);
+    
+    const [desactivar, setDesactivar] = useState(() => {
+        const giro = localStorage.getItem('giro');
+        return giro === 'true';
+    });
 
     useEffect(() => {
-        setTextoTarjeta(`${datosTarjeta.nickname},\nGracias por\nacompañaros en\nesta aventura! ❤️`);
-    }, [datosTarjeta]);
+        window.localStorage.setItem('giro', desactivar)
+    }, [desactivar])
+    
 
     return (
         <>
             <div className='postalTD'>
                 <div style={{ width: '100%', height: '400px', position: 'relative' }}>
-                    <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                    <Canvas className={desactivar ? 'doScroll' : undefined} camera={{ position: [0, 0, 5], fov: 50 }}>
                         <ambientLight intensity={1} />
                         <directionalLight position={[4, 1.5, 10]} />
                         <group>
@@ -53,11 +62,25 @@ export const Postal = ({datosTarjeta}) => {
                                     {textoTarjeta}
                                 </Text>
                             </group>
+                            <group position={[0.25, -1.9, -0.012]} rotation={[0, Math.PI, 0]}>
+                                <Text
+                                    font={RockSalt}
+                                    fontSize={0.1}
+                                    color="#222"
+                                    anchorX="start"
+                                    anchorY="middle"
+                                    lineHeight='1.5'
+                                >
+                                    {'Hecho con amor por Memuquiel'}
+                                </Text>
+                            </group>
                         </group>
                         <OrbitControls enablePan={false} enableZoom={false} />
                     </Canvas>
                 </div>
-                <img src={girar}/>
+                <div className={`touch ${!desactivar ? 'opacar' : undefined}`}>
+                    <img src={girar} onClick={() => desactivar ? setDesactivar(false) : setDesactivar(true)} />
+                </div>
             </div>
         </>
     );

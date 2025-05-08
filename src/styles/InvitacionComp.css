@@ -12,6 +12,16 @@
     font-family: "Tuffy", sans-serif;
   }
 
+  .canciones input {
+    background-color: #F6E3BA ;
+    border: 0;
+    color: black;
+  }
+
+  .canciones input::placeholder {
+    color: black;
+  }
+  
   .sugerencias {
     padding: 4px;
     background-image: url('/src/assets/images/backPass.jpg');
@@ -209,15 +219,6 @@
     padding-right: 4px;
   }
 
-  /* .viaje {
-    grid-column: 2 / -1;
-    display: flex;
-
-    width: 100%;
-    padding: 0 4px;
-    margin: 4px 0;
-  } */
-
   .viaje div {
     justify-items: start;
   }
@@ -229,7 +230,7 @@
     transform: translateX(-50%);
   }
 
-  .container {
+  .relative {
     z-index: 1;
     position: relative;
   }
@@ -519,6 +520,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    max-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -535,7 +537,7 @@
   }
 
   .custom-modal-backdrop.ocultar {
-    transform: translateY(100%);
+    transform: translateY(120%);
     transition: all 0.8s;
   }
 
@@ -565,7 +567,7 @@
   }
 
   .custom-modal-body {
-    max-height: 60vh;
+    max-height: 60dvh;
     overflow-y: auto;
     padding: 8px;
   }
@@ -749,11 +751,12 @@
 
   .acumulacionFotos img {
     position: absolute;
-    transition: all 2s ease-out;
+    transition: all 2s;
     max-height: 280px;
     width: auto;
     top: 50%;
     left: 50%;
+    will-change: transform;
   }
 
   .acumulacionFotos {
@@ -780,7 +783,7 @@
 
   .acumulacionFotos button i {
     font-size: 30px;
-    color: #CFB284;
+    color: black;
   }
 
   .acumulacionFotos button i::before {
@@ -836,8 +839,17 @@
 
   .temazo {
     position: absolute;
-    top: -50%;
+    top: -50px;
     right: -12px;
+  }
+
+  .inputSend {
+    position: absolute;
+    right: 8px;
+    text-decoration: none;
+    border: 0;
+    background-color: transparent;
+    color: green;
   }
 
   .permanent-marker-regular {
@@ -850,10 +862,20 @@
   position: relative;
 }
 
-.postalTD img {
+
+.doScroll {
+  touch-action: auto !important;
+  pointer-events: auto !important;
+}
+
+.touch {
   position: absolute;
   top: 0;
   right: 20px;
   opacity: 0.5;
+  transition: all 1s;
 }
 
+.touch.opacar {
+  opacity: 1;
+}

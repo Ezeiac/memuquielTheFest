@@ -18,10 +18,15 @@ import cena from '../assets/icons/cena.png'
 import confirm from '../assets/icons/confirmDate.png'
 import check from '../assets/icons/checkOk.gif'
 import temazo from '../assets/icons/temazo.gif'
-
 import { Postal } from './Postal';
+import maleta from '../assets/icons/maleta.png';
+import bailemos from '../assets/icons/baile.png';
+import vestido from '../assets/icons/vestido.png';
+import camisa from '../assets/icons/camisa.png';
+import regalo from '../assets/icons/regalo.png';
 
 export const InvitacionComp = ({ datosOk }) => {
+    
     const [grupoFlia, setGrupoFlia] = useState([]);
     const [nGrupo, setNGrupo] = useState(null);
     const [checkedItems, setCheckedItems] = useState({});
@@ -82,9 +87,10 @@ export const InvitacionComp = ({ datosOk }) => {
                 const initialChecked = {};
                 const initialDuerme = {};
                 grupoCompleto.forEach((persona) => {
-                    initialChecked[persona.id] = persona.confirm;
+                    initialChecked[persona.id] = persona.confirm === null ? true : persona.confirm;
+                
                     if (persona.paga === "Alojamiento") {
-                        initialDuerme[persona.id] = persona.duerme || false;
+                        initialDuerme[persona.id] = persona.duerme === null ? true : persona.duerme;
                     }
                 });
                 setCheckedItems(initialChecked);
@@ -158,100 +164,93 @@ export const InvitacionComp = ({ datosOk }) => {
     }, [consulta])
 
 
-    const cuantaImg = useRef();
-    const imagenesRef = useRef([]);
-    const transformacionesAsignadas = useRef([]);
-    const estilosAsignados = useRef([]);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-    const [arranca, setarranca] = useState(false);
+    const cuantaImg = useRef()
+    const imagenesRef = useRef([])
+    const transformacionesAsignadas = useRef([])
+    const estilosAsignados = useRef([])
+    const initialized = useRef(false)
+    const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isDisabledfw, setIsDisabledfw] = useState(true)
     const [isDisabledbk, setIsDisabledbk] = useState(true)
-
+  
     const obtenerImagenes = () => {
-        if (!cuantaImg.current) return [];
-        return Array.from(cuantaImg.current.children).filter(
-            (elemento) => elemento.tagName === 'IMG'
-        );
-    };
-
+      if (!cuantaImg.current) return []
+      return Array.from(cuantaImg.current.children).filter(
+        (elemento) => elemento.tagName === 'IMG'
+      )
+    }
+  
     const avanzarImagen = () => {
-        const nuevoIndex = currentImageIndex + 1;
-        if (nuevoIndex < imagenesRef.current.length) {
-            setCurrentImageIndex(nuevoIndex);
-
-            const img = imagenesRef.current[nuevoIndex];
-            const gradosDep = Math.floor(Math.random() * 31) - 15;
-            img.style.transform = `rotate(${gradosDep}deg) translate(-50%, -50%)`;
-            img.style.transition = 'transform 1.5s ease';
-        }
-    };
-
+      const nuevoIndex = currentImageIndex + 1
+      if (nuevoIndex < imagenesRef.current.length) {
+        setCurrentImageIndex(nuevoIndex)
+        const img = imagenesRef.current[nuevoIndex]
+        const gradosDep = Math.floor(Math.random() * 31) - 15
+        img.style.transform = `rotate(${gradosDep}deg) translate(-50%, -50%)`
+        img.style.transition = 'transform 1.5s ease'
+      }
+    }
+  
     const retrocederImagen = () => {
-        const nuevoIndex = currentImageIndex - 1;
-        if (nuevoIndex >= 0) {
-            setCurrentImageIndex(nuevoIndex);
-
-            const img = imagenesRef.current[currentImageIndex];
-            const { grados, ancho, alto } = transformacionesAsignadas.current[currentImageIndex];
-            img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`;
-            img.style.transition = 'transform 1.5s ease';
+        if (currentImageIndex > 0) {
+          const img = imagenesRef.current[currentImageIndex];
+          const { grados, ancho, alto } = transformacionesAsignadas.current[currentImageIndex];
+          img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`;
+          img.style.transition = 'transform 1.5s ease';
+          setCurrentImageIndex(currentImageIndex - 1);
         }
-    };
-
+      };      
+  
     useEffect(() => {
-        const imagenes = obtenerImagenes();
-        imagenesRef.current = imagenes;
-
-        estilosAsignados.current = imagenes.map(() => {
-            const estilo = Math.floor(Math.random() * 4) + 1;
-            return `postal${estilo}`;
-        });
-
-        transformacionesAsignadas.current = imagenes.map(() => {
-            const alto = Math.floor(Math.random() * 41) - 20;
-            const grados = Math.floor(Math.random() * 41) - 20;
-            const ancho = [-1, 1][Math.floor(Math.random() * 2)] * 300;
-            return { grados, ancho, alto };
-        });
-
-        imagenes.forEach((img, i) => {
-            const { grados, ancho, alto } = transformacionesAsignadas.current[i];
-            img.setAttribute(
-                'style',
-                `transform:rotate(${grados}deg) translate(${ancho}%, ${alto}px); transition: transform 1.5s ease;`
-            );
-            img.classList.add(estilosAsignados.current[i]);
-        });
-    }, []);
-
+      const imagenes = obtenerImagenes()
+      imagenesRef.current = imagenes
+  
+      estilosAsignados.current = imagenes.map(() => {
+        const estilo = Math.floor(Math.random() * 4) + 1
+        return `postal${estilo}`
+      })
+  
+      transformacionesAsignadas.current = imagenes.map(() => {
+        const alto = Math.floor(Math.random() * 41) - 20
+        const grados = Math.floor(Math.random() * 41) - 20
+        const ancho = [-1, 1][Math.floor(Math.random() * 2)] * 300
+        return { grados, ancho, alto }
+      })
+  
+      imagenes.forEach((img, i) => {
+        const { grados, ancho, alto } = transformacionesAsignadas.current[i]
+        img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`
+        img.style.transition = 'transform 1.5s ease'
+        img.classList.add(estilosAsignados.current[i])
+      })
+    }, [])
+  
     useEffect(() => {
-        if (viewcomienzaImg) {
-            imagenesRef.current.forEach((img, index) => {
-                const gradosDep = Math.floor(Math.random() * 21) - 10;
-                setTimeout(() => {
-                    img.setAttribute(
-                        'style',
-                        `transform:rotate(${gradosDep}deg) translate(-50%, -50%); transition: transform 1.5s ease;`
-                    );
-                    setCurrentImageIndex(index);
-                }, index * 2000);
-            });
-        }
-    }, [viewcomienzaImg]);
-
+      if (viewcomienzaImg && !initialized.current) {
+        initialized.current = true
+        imagenesRef.current.forEach((img, index) => {
+          const gradosDep = Math.floor(Math.random() * 21) - 10
+          setTimeout(() => {
+            img.style.transform = `rotate(${gradosDep}deg) translate(-50%, -50%)`
+            img.style.transition = 'transform 1.5s ease'
+            if (index !== currentImageIndex) setCurrentImageIndex(index)
+          }, index * 2000)
+        })
+      }
+    }, [viewcomienzaImg])
+  
     useEffect(() => {
+      if (currentImageIndex + 1 === imagenesRef.current.length) {
         setTimeout(() => {
-            if (currentImageIndex + 1 == imagenesRef.current.length) {
-                setIsDisabledfw(false)
-                setIsDisabledbk(false)
-            }
-        }, currentImageIndex + 1 * 2000);
+          setIsDisabledfw(false)
+          setIsDisabledbk(false)
+        }, 2000)
+      }
     }, [currentImageIndex])
 
     const imagenes = [
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/1.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/IMG-20250127-WA0036_rfowjb.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img7_jtwkvv.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img8_sfncp8.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img13_qig7s3.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img4_oxowmc.jpg',
@@ -261,7 +260,13 @@ export const InvitacionComp = ({ datosOk }) => {
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img6_slp6tf.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img10_ciqgbi.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img11_qmz35c.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725204/img7_kwuym3.jpg',        
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img5_vgjbns.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725141/IMG-20250127-WA0028_cci0bm.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725140/IMG-20250127-WA0032_uiugpb.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725136/IMG-20250127-WA0018_tkefvw.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725119/img3_riod1m.jpg',
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746724986/Imagen_de_WhatsApp_2025-05-07_a_las_15.38.05_575285fc_pqvcir.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746694954/1f64d4db_rjlijk.jpg'
     ];
 
@@ -309,14 +314,17 @@ export const InvitacionComp = ({ datosOk }) => {
         };
 
         await guardarCancion(temaData);
-        setAgregarTema('');
+
+        setTimeout(() => {
+            setAgregarTema('');            
+        }, 1500);
 
         settemaAgregado(true)
 
         setTimeout(() => {
             settemaAgregado(false)
 
-        }, 2300);
+        }, 3000);
 
 
     };
@@ -326,10 +334,11 @@ export const InvitacionComp = ({ datosOk }) => {
         <>
 
             <>
+                {/* VISTA INICIAL */}
                 <section>
                     <div className='primeraVista py-3'>
                         <Background />
-                        <div className='container acomodarCont'>
+                        <div className='container relative acomodarCont'>
                             <svg width="400" height="200" viewBox="0 0 400 200">
                                 <defs>
                                     <path id="curva" d="M 50 150 Q 200 20, 350 150" fill="transparent" />
@@ -342,7 +351,7 @@ export const InvitacionComp = ({ datosOk }) => {
                             </svg>
                             <img src={logo} width='200' />
                             <h1 className='py-4'>Melina y Ezequiel</h1>
-                            <h2 className='h4 text-end align-self-end'>*Prepara tu equipaje <br />para acompañarnos</h2>
+                            <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepara tu equipaje <br />para acompañarnos</h2>
                         </div>
                     </div>
                 </section>
@@ -458,7 +467,7 @@ export const InvitacionComp = ({ datosOk }) => {
                                 <img
                                     key={index}
                                     src={img}
-                                    className={`mifoto ${arranca ? 'animacion' : ''} ${estilosAsignados.current[index] || ''}`}
+                                    className={`mifoto ${initialized ? 'animacion' : ''} ${estilosAsignados.current[index] || ''}`}
                                     alt={`Imagen ${index + 1}`}
                                 />
                             ))}
@@ -469,34 +478,34 @@ export const InvitacionComp = ({ datosOk }) => {
                 </section>
                 {/* RELOJ DESCUENTO */}
                 <section className='my-5'>
-                    <h1 className='text-center'>Ya se viene la<br />Memuquiel Fest</h1>
+                    <h1 className='text-center'>Ya se viene la<br />Memuquiel Fest <img src={fiesta} width='40' /></h1>
                     <Contador />
                 </section>
                 {/* MUSICA */}
                 <section className='container my-5'>
-                    <h1 className='text-center'>Bailemos de todo</h1>
+                    <h1 className='text-center'>Bailemos<br/>de todo <img src={bailemos} width='40' /></h1>
                     <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
-                    <form onSubmit={handleCancion} className='position-relative'>
+                    <form onSubmit={handleCancion} className='position-relative canciones'>
                         <input
-                            className='px-2'
+                            className='px-2 canciones'
                             onChange={(e) => setAgregarTema(e.target.value)}
                             value={agregarTema}
                             placeholder='Indica nombre o link de tu canción'
                         />
-                        <button type="submit" className='platinum'>Enviar</button>
+                        <button type="submit" className='inputSend'>Enviar</button>
                         {temaAgregado && <img className='temazo' src={temazo} width='200' />}
                     </form>
                 </section>
                 {/* VESTIMENTA */}
-                <section className='container my-5'>
-                    <h1 className='text-center'>Vestimenta</h1>
+                <section className='container relative my-5'>
+                    <h1 className='text-center'>Vestimenta <img src={vestido} width='40' /><img src={camisa} width='40' /></h1>
                     <p>Elegante sport, así que podes llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitas algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
                 </section>
                 {/* FONDO MEDIO */}
                 <div className='backMiddle'><Background /></div>
                 {/* REGALO */}
-                <section className='container my-5'>
-                    <h1 className='text-center'>Regalos</h1>
+                <section className='container relative my-5'>
+                    <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
                     <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
                     <p>Rocío González<br />ESXX XXXX XXXX XXXX XXXX</p>
                     <p>Bizum: Manuel<br />+34 666 777 888</p>
@@ -566,8 +575,6 @@ export const InvitacionComp = ({ datosOk }) => {
                         </ul>
                     </div>
                     <div className="custom-modal-footer">
-                        {consulta.paga == 'MediaTarjeta' &&
-                            <p className='mb-0'>Número de cuenta:</p>}
                         <span>
                             Si eres vegetariano o tienes alguna alergia/intolerancia, avísanos al momento de confirmar
                         </span>

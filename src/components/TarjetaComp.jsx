@@ -37,11 +37,9 @@ export function TarjetaComp({ datosTarjeta }) {
     }
     else {
       setScrollRotation(3.14159)
-    }    
+    }
     setChauText(true)
   }
-
-
 
   const { ref: verAsistenciaRef, inView: isAsistenciaVisible, entry } = useInView({
     threshold: 0.9,
@@ -77,10 +75,12 @@ export function TarjetaComp({ datosTarjeta }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
+  const cuentaTransf = '000000000000000A'
+
   useEffect(() => {
     const texto = (e) => {
       if (e.paga === 'MediaTarjeta') {
-        return 'La tarjeta tiene un valor de\n$75.000 (considerá que a partir\ndel 8 de julio se actualizará\npor inflación).\nMenores de 12 años solo deben\nconfirmar asistencia para\npreparar su menú.\nAl confirmar tu asistencia,\nencontrarás la cuenta para el pago\ne información sobre alojamientos\ncernanos.';
+        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nMenores de 12 años solo deben\nconfirmar asistencia para\nprepararles su menú.\nAl confirmar tu asistencia,\nencontrarás información sobre\nalojamientos cercanos.\nCuenta a transferir:\n${cuentaTransf}`;
       } else if (e.paga === 'SoloFiesta') {
         return 'Premium pass!\nSolo debes confirmar asistencia\nhasta el día 8 de octubre.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cernanos.';
       } else if (e.paga === 'Alojamiento') {
@@ -92,7 +92,7 @@ export function TarjetaComp({ datosTarjeta }) {
 
 
   return (
-    <div style={{ width: '100%', height: '300px', position: 'relative' }} ref={verAsistenciaRef} onClick={rotarManual}>
+    <div style={{ width: '100%', height: '300px', position: 'relative' }} ref={verAsistenciaRef}>
       <Canvas camera={{ position: [0, 0, 5], fov: 35 }}>
         <ambientLight intensity={1} />
         <directionalLight position={[4, 1.5, 10]} />
@@ -102,6 +102,8 @@ export function TarjetaComp({ datosTarjeta }) {
           frente={frente}
           datosTarjeta={datosTarjeta}
           activarAnimacion={activarAnimacion}
+          rotarManual={rotarManual}
+          cuentaTransf={cuentaTransf}
         />
       </Canvas>
       <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona para voltear</p></div>
@@ -109,9 +111,11 @@ export function TarjetaComp({ datosTarjeta }) {
   );
 }
 
-function Tarjeta3D({ scrollRotation, textoTarjeta, frente, activarAnimacion }) {
+function Tarjeta3D({ scrollRotation, textoTarjeta, frente, activarAnimacion, rotarManual, cuentaTransf }) {
   const meshRef = useRef();
 
+  const [copiado, setCopiado] = useState('Copiar cuenta')
+  const nCuenta = cuentaTransf
   useFrame(() => {
     if (activarAnimacion && meshRef.current) {
       meshRef.current.rotation.y = THREE.MathUtils.lerp(
@@ -124,78 +128,105 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, activarAnimacion }) {
 
   return (
     <group ref={meshRef}>
-      <RoundedBox args={[3.5, 2.5, 0.01]} radius={0.02} smoothness={4}>
-        <meshStandardMaterial color="black" metalness={0.9} roughness={0.3} />
-      </RoundedBox>
+  {/* Tarjeta con rotación */}
+  <group onClick={rotarManual}>
+    <RoundedBox args={[3.8, 2.5, 0.01]} radius={0.02} smoothness={4}>
+      <meshStandardMaterial color="black" metalness={0.9} roughness={0.3} />
+    </RoundedBox>
 
-      <Text
-        position={[-1.5, 0.7, 0.045]}
-        font={RobotoMono}
-        fontSize={0.4}
-        color="#E5E4E2"
-        anchorX="start"
-        anchorY="middle"
-      >
-        {'Acceso VIP'}
-      </Text>
-      <mesh position={[-0, 0.35, 0.045]}>
-        <planeGeometry args={[3.5, 0.02]} />
-        <meshBasicMaterial color="#E5E4E2" />
-      </mesh>
-      <Text
-        position={[-1.5, -0.30, 0.045]}
-        font={RobotoMono}
-        fontSize={0.2}
-        color="#E5E4E2"
-        anchorX="start"
-        anchorY="middle"
-      >
-        {'0901 2021 0811 2025 \n'}
-      </Text>
-      <Text
-        position={[-1.5, -0.6, 0.045]}
-        font={RobotoMono}
-        fontSize={0.17}
-        color="#E5E4E2"
-        anchorX="start"
-        anchorY="middle"
-      >
-        {frente}
-      </Text>
-      <Text
-        position={[0, -0.85, 0.045]}
-        font={RobotoMono}
-        fontSize={0.08}
-        color="grey"
-        anchorX="start"
-        anchorY="middle"
-      >
-        {'Fecha vencimiento'}
-      </Text>
-      <Text
-        position={[0.9, -0.85, 0.045]}
-        font={RobotoMono}
-        fontSize={0.1}
-        color="#E5E4E2"
-        anchorX="start"
-        anchorY="middle"
-      >
-        {'12/25'}
-      </Text>
+    <Text
+      position={[-1.5, 0.7, 0.045]}
+      font={RobotoMono}
+      fontSize={0.4}
+      color="#E5E4E2"
+      anchorX="start"
+      anchorY="middle"
+    >
+      {'Acceso VIP'}
+    </Text>
 
-      {/* Texto al dorso */}
-      <Text
-        position={[1.5, 0, -0.041]}
-        font={RobotoMono}
-        fontSize={0.15}
-        color="#E5E4E2"
-        rotation={[0, Math.PI, 0]}
-        anchorX="start"
-        anchorY="middle"
-      >
-        {textoTarjeta}
-      </Text>
-      <ImagenSobreTarjeta />
-    </group>
+    <mesh position={[-0, 0.35, 0.045]}>
+      <planeGeometry args={[3.5, 0.02]} />
+      <meshBasicMaterial color="#E5E4E2" />
+    </mesh>
+
+    <Text
+      position={[-1.5, -0.30, 0.045]}
+      font={RobotoMono}
+      fontSize={0.2}
+      color="#E5E4E2"
+      anchorX="start"
+      anchorY="middle"
+    >
+      {'0901 2021 0811 2025 \n'}
+    </Text>
+
+    <Text
+      position={[-1.5, -0.6, 0.045]}
+      font={RobotoMono}
+      fontSize={0.17}
+      color="#E5E4E2"
+      anchorX="start"
+      anchorY="middle"
+    >
+      {frente}
+    </Text>
+
+    <Text
+      position={[0, -0.85, 0.045]}
+      font={RobotoMono}
+      fontSize={0.08}
+      color="grey"
+      anchorX="start"
+      anchorY="middle"
+    >
+      {'Fecha vencimiento'}
+    </Text>
+
+    <Text
+      position={[0.9, -0.85, 0.045]}
+      font={RobotoMono}
+      fontSize={0.1}
+      color="#E5E4E2"
+      anchorX="start"
+      anchorY="middle"
+    >
+      {'12/25'}
+    </Text>
+
+    {/* Texto al dorso */}
+    <Text
+      position={[1.5, 0, -0.041]}
+      font={RobotoMono}
+      fontSize={0.15}
+      color="#E5E4E2"
+      rotation={[0, Math.PI, 0]}
+      anchorX="start"
+      anchorY="middle"
+    >
+      {textoTarjeta}
+    </Text>
+  </group>
+
+  <Text
+    position={[-0.2, -0.985, -0.05]}
+    font={RobotoMono}
+    fontSize={0.15}
+    color="#E5E4E2"
+    rotation={[0, Math.PI, 0]}
+    anchorX="start"
+    anchorY="middle"
+    onClick={(e) => {
+      e.stopPropagation();
+      navigator.clipboard.writeText(nCuenta);
+      setCopiado('Copiado');
+    }}
+  >
+    {copiado}
+  </Text>
+
+  <ImagenSobreTarjeta />
+</group>
+
   );
 }
