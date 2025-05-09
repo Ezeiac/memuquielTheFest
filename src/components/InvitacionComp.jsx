@@ -24,9 +24,10 @@ import bailemos from '../assets/icons/baile.png';
 import vestido from '../assets/icons/vestido.png';
 import camisa from '../assets/icons/camisa.png';
 import regalo from '../assets/icons/regalo.png';
+import { element } from 'three/tsl';
 
 export const InvitacionComp = ({ datosOk }) => {
-    
+
     const [grupoFlia, setGrupoFlia] = useState([]);
     const [nGrupo, setNGrupo] = useState(null);
     const [checkedItems, setCheckedItems] = useState({});
@@ -43,6 +44,10 @@ export const InvitacionComp = ({ datosOk }) => {
         }));
     };
 
+
+    const { ref: finalPage, inView: viewFinalPage, entry: entryfinalPage } = useInView({
+        threshold: 0.8,
+    });
 
     const { ref: popUp, inView: viewPopUp, entry: entryPopUp } = useInView({
         threshold: 0.8,
@@ -88,7 +93,7 @@ export const InvitacionComp = ({ datosOk }) => {
                 const initialDuerme = {};
                 grupoCompleto.forEach((persona) => {
                     initialChecked[persona.id] = persona.confirm === null ? true : persona.confirm;
-                
+
                     if (persona.paga === "Alojamiento") {
                         initialDuerme[persona.id] = persona.duerme === null ? true : persona.duerme;
                     }
@@ -172,80 +177,80 @@ export const InvitacionComp = ({ datosOk }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isDisabledfw, setIsDisabledfw] = useState(true)
     const [isDisabledbk, setIsDisabledbk] = useState(true)
-  
+
     const obtenerImagenes = () => {
-      if (!cuantaImg.current) return []
-      return Array.from(cuantaImg.current.children).filter(
-        (elemento) => elemento.tagName === 'IMG'
-      )
+        if (!cuantaImg.current) return []
+        return Array.from(cuantaImg.current.children).filter(
+            (elemento) => elemento.tagName === 'IMG'
+        )
     }
-  
+
     const avanzarImagen = () => {
-      const nuevoIndex = currentImageIndex + 1
-      if (nuevoIndex < imagenesRef.current.length) {
-        setCurrentImageIndex(nuevoIndex)
-        const img = imagenesRef.current[nuevoIndex]
-        const gradosDep = Math.floor(Math.random() * 31) - 15
-        img.style.transform = `rotate(${gradosDep}deg) translate(-50%, -50%)`
-        img.style.transition = 'transform 1.5s ease'
-      }
-    }
-  
-    const retrocederImagen = () => {
-        if (currentImageIndex > 0) {
-          const img = imagenesRef.current[currentImageIndex];
-          const { grados, ancho, alto } = transformacionesAsignadas.current[currentImageIndex];
-          img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`;
-          img.style.transition = 'transform 1.5s ease';
-          setCurrentImageIndex(currentImageIndex - 1);
-        }
-      };      
-  
-    useEffect(() => {
-      const imagenes = obtenerImagenes()
-      imagenesRef.current = imagenes
-  
-      estilosAsignados.current = imagenes.map(() => {
-        const estilo = Math.floor(Math.random() * 4) + 1
-        return `postal${estilo}`
-      })
-  
-      transformacionesAsignadas.current = imagenes.map(() => {
-        const alto = Math.floor(Math.random() * 41) - 20
-        const grados = Math.floor(Math.random() * 41) - 20
-        const ancho = [-1, 1][Math.floor(Math.random() * 2)] * 300
-        return { grados, ancho, alto }
-      })
-  
-      imagenes.forEach((img, i) => {
-        const { grados, ancho, alto } = transformacionesAsignadas.current[i]
-        img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`
-        img.style.transition = 'transform 1.5s ease'
-        img.classList.add(estilosAsignados.current[i])
-      })
-    }, [])
-  
-    useEffect(() => {
-      if (viewcomienzaImg && !initialized.current) {
-        initialized.current = true
-        imagenesRef.current.forEach((img, index) => {
-          const gradosDep = Math.floor(Math.random() * 21) - 10
-          setTimeout(() => {
+        const nuevoIndex = currentImageIndex + 1
+        if (nuevoIndex < imagenesRef.current.length) {
+            setCurrentImageIndex(nuevoIndex)
+            const img = imagenesRef.current[nuevoIndex]
+            const gradosDep = Math.floor(Math.random() * 31) - 15
             img.style.transform = `rotate(${gradosDep}deg) translate(-50%, -50%)`
             img.style.transition = 'transform 1.5s ease'
-            if (index !== currentImageIndex) setCurrentImageIndex(index)
-          }, index * 2000)
-        })
-      }
-    }, [viewcomienzaImg])
-  
+        }
+    }
+
+    const retrocederImagen = () => {
+        if (currentImageIndex > 0) {
+            const img = imagenesRef.current[currentImageIndex];
+            const { grados, ancho, alto } = transformacionesAsignadas.current[currentImageIndex];
+            img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`;
+            img.style.transition = 'transform 1.5s ease';
+            setCurrentImageIndex(currentImageIndex - 1);
+        }
+    };
+
     useEffect(() => {
-      if (currentImageIndex + 1 === imagenesRef.current.length) {
-        setTimeout(() => {
-          setIsDisabledfw(false)
-          setIsDisabledbk(false)
-        }, 2000)
-      }
+        const imagenes = obtenerImagenes()
+        imagenesRef.current = imagenes
+
+        estilosAsignados.current = imagenes.map(() => {
+            const estilo = Math.floor(Math.random() * 4) + 1
+            return `postal${estilo}`
+        })
+
+        transformacionesAsignadas.current = imagenes.map(() => {
+            const alto = Math.floor(Math.random() * 41) - 20
+            const grados = Math.floor(Math.random() * 41) - 20
+            const ancho = [-1, 1][Math.floor(Math.random() * 2)] * 300
+            return { grados, ancho, alto }
+        })
+
+        imagenes.forEach((img, i) => {
+            const { grados, ancho, alto } = transformacionesAsignadas.current[i]
+            img.style.transform = `rotate(${grados}deg) translate(${ancho}%, ${alto}px)`
+            img.style.transition = 'transform 1.5s ease'
+            img.classList.add(estilosAsignados.current[i])
+        })
+    }, [])
+
+    useEffect(() => {
+        if (viewcomienzaImg && !initialized.current) {
+            initialized.current = true
+            imagenesRef.current.forEach((img, index) => {
+                const gradosDep = Math.floor(Math.random() * 21) - 10
+                setTimeout(() => {
+                    img.style.transform = `rotate(${gradosDep}deg) translate(-50%, -50%)`
+                    img.style.transition = 'transform 1.5s ease'
+                    if (index !== currentImageIndex) setCurrentImageIndex(index)
+                }, index * 2000)
+            })
+        }
+    }, [viewcomienzaImg])
+
+    useEffect(() => {
+        if (currentImageIndex + 1 === imagenesRef.current.length) {
+            setTimeout(() => {
+                setIsDisabledfw(false)
+                setIsDisabledbk(false)
+            }, 2000)
+        }
     }, [currentImageIndex])
 
     const imagenes = [
@@ -260,7 +265,7 @@ export const InvitacionComp = ({ datosOk }) => {
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img6_slp6tf.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img10_ciqgbi.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img11_qmz35c.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725204/img7_kwuym3.jpg',        
+        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725204/img7_kwuym3.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img5_vgjbns.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725141/IMG-20250127-WA0028_cci0bm.jpg',
         'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725140/IMG-20250127-WA0032_uiugpb.jpg',
@@ -316,7 +321,7 @@ export const InvitacionComp = ({ datosOk }) => {
         await guardarCancion(temaData);
 
         setTimeout(() => {
-            setAgregarTema('');            
+            setAgregarTema('');
         }, 1500);
 
         settemaAgregado(true)
@@ -325,10 +330,21 @@ export const InvitacionComp = ({ datosOk }) => {
             settemaAgregado(false)
 
         }, 3000);
-
-
     };
 
+    const ubicar = document.querySelector('.flotante');
+    useEffect(() => {
+        if (ubicar) {
+            ubicar.classList.toggle('aparecer', !viewFinalPage);
+        }
+    }, [viewFinalPage]);
+
+    const [copiadoM, setCopiadoM] = useState('Copiar alias')
+    const [copiadoE, setCopiadoE] = useState('Copiar alias')
+
+    // CUENTAS
+    const cuentaTransfM = '000000000000000M'
+    const cuentaTransfE = '000000000000000E'
 
     return (
         <>
@@ -351,13 +367,13 @@ export const InvitacionComp = ({ datosOk }) => {
                             </svg>
                             <img src={logo} width='200' />
                             <h1 className='py-4'>Melina y Ezequiel</h1>
-                            <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepara tu equipaje <br />para acompañarnos</h2>
+                            <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepará tu equipaje <br />para acompañarnos</h2>
                         </div>
                     </div>
                 </section>
                 {/* PASAJE DE AVION */}
                 <section className='my-5'>
-                    <div className="billete">
+                    <div className="billete pb-2">
                         <img src={verBarra} width="64" className="barra" />
                         <div className="membPasaje">
                             <h2>Tarjeta de embarque</h2>
@@ -456,6 +472,7 @@ export const InvitacionComp = ({ datosOk }) => {
                         <TarjetaComp
                             datosTarjeta={consulta}
                             scrollRotation={scrollRotation}
+                            cuentaTransfM={cuentaTransfM}
                         />
                     </div>
                 </section>
@@ -483,7 +500,7 @@ export const InvitacionComp = ({ datosOk }) => {
                 </section>
                 {/* MUSICA */}
                 <section className='container my-5'>
-                    <h1 className='text-center'>Bailemos<br/>de todo <img src={bailemos} width='40' /></h1>
+                    <h1 className='text-center'>Bailemos<br />de todo <img src={bailemos} width='40' /></h1>
                     <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
                     <form onSubmit={handleCancion} className='position-relative canciones'>
                         <input
@@ -507,12 +524,22 @@ export const InvitacionComp = ({ datosOk }) => {
                 <section className='container relative my-5'>
                     <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
                     <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
-                    <p>Rocío González<br />ESXX XXXX XXXX XXXX XXXX</p>
-                    <p>Bizum: Manuel<br />+34 666 777 888</p>
+                    <div className='noMB'>
+                        <p className='text-center'>Memu</p>
+                        <div className='d-flex flex-wrap justify-content-around mb-3'>
+                            <p>{cuentaTransfM}</p>
+                            <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfM) && setCopiadoM(('Copiado ✅'))}>{copiadoM}</button>
+                        </div>
+                        <p className='text-center'>Quiel</p>
+                        <div className='d-flex flex-wrap justify-content-around mb-3'>
+                            <p>{cuentaTransfE}</p>
+                            <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfE) && setCopiadoE(('Copiado ✅'))}>{copiadoE}</button>
+                        </div>
+                    </div>
                 </section>
                 {/* FINAL */}
-                <section className='final pb-2'>
-                <Postal datosTarjeta={consulta}/>
+                <section className='final pb-4' ref={finalPage}>
+                    <Postal datosTarjeta={consulta} />
                 </section>
 
 

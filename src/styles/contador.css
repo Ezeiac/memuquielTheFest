@@ -112,6 +112,10 @@
     font-size: 40px;
 }
 
+.flipdown .rotor-group {
+    width: 33%;
+}
+
 .flipdown .rotor-group:nth-child(1) .rotor-group-heading:before {
     content: 'Días'
 }

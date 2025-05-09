@@ -12,10 +12,15 @@
     font-family: "Tuffy", sans-serif;
   }
 
+  input {
+    outline: 1px;
+  }
+
   .canciones input {
     background-color: #F6E3BA ;
     border: 0;
     color: black;
+    border-radius: 8px;
   }
 
   .canciones input::placeholder {
@@ -90,7 +95,8 @@
   }
 
   .esError {
-    color: red
+    color: red;
+    text-align: center;
   }
 
   .acomodarCont {
@@ -275,7 +281,7 @@
     animation: bounce2 2s ease infinite;
     position: absolute;
     left: 50%;
-    top: 90%;
+    top: 92%;
     opacity: 1;
     transition: opacity 1s;
   }
@@ -290,7 +296,7 @@
     }
 
     80% {
-      transform: translate(-50%, -15%);
+      transform: translate(-50%, -13%);
     }
 
     90% {
@@ -848,8 +854,10 @@
     right: 8px;
     text-decoration: none;
     border: 0;
-    background-color: transparent;
-    color: green;
+    border-left: 1px solid #4f4638;
+    background-color: #F6E3BA;
+    color: #4f4638;
+    padding-left: 8px;
   }
 
   .permanent-marker-regular {
@@ -878,4 +886,16 @@
 
 .touch.opacar {
   opacity: 1;
+}
+
+.copiar {
+    text-decoration: none;
+    border: 0;
+    background-color: transparent;
+    color: #4f4638;
+    padding: 0;
+}
+
+.noMB p {
+  margin-bottom: 0;
 }

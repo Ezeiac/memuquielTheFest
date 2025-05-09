@@ -21,23 +21,25 @@ function ImagenSobreTarjeta() {
   );
 }
 
-export function TarjetaComp({ datosTarjeta }) {
+export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
   const frente = `${datosTarjeta.nombre} ${datosTarjeta.apellido}`;
   const [textoTarjeta, setTextoTarjeta] = useState('');
 
   const [tarjetaSeccion, setTarjetaSeccion] = useState(false);
   const [scrollRotation, setScrollRotation] = useState(0);
 
-  const [activarAnimacion, setActivarAnimacion] = useState(false);
   const [chauText, setChauText] = useState(false)
+
+  const [noRota, setNoRota] = useState(true)
 
   const rotarManual = () => {
     if (scrollRotation) {
       setScrollRotation(0)
     }
     else {
-      setScrollRotation(3.14159)
+      setScrollRotation(-3.14159)
     }
+    setNoRota(false)
     setChauText(true)
   }
 
@@ -45,42 +47,10 @@ export function TarjetaComp({ datosTarjeta }) {
     threshold: 0.9,
   });
 
-  const handleScroll = useCallback(() => {
-    if (!entry) return;
-
-    const rect = entry.target.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-
-    const isFullyVisible = entry.intersectionRatio >= 0.9;
-    setTarjetaSeccion(isFullyVisible);
-
-    if (isFullyVisible && !activarAnimacion) {
-      setActivarAnimacion(true);
-    }
-
-    if (isFullyVisible || entry.boundingClientRect.y < 0) {
-      setScrollRotation(3.14159);
-
-      setTimeout(() => {
-        setChauText(true)
-      }, 5000);
-
-    } else {
-      setScrollRotation(0);
-    }
-  }, [entry, activarAnimacion]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
-
-  const cuentaTransf = '000000000000000A'
-
   useEffect(() => {
     const texto = (e) => {
       if (e.paga === 'MediaTarjeta') {
-        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nMenores de 12 años solo deben\nconfirmar asistencia para\nprepararles su menú.\nAl confirmar tu asistencia,\nencontrarás información sobre\nalojamientos cercanos.\nCuenta a transferir:\n${cuentaTransf}`;
+        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nMenores de 12 años solo deben\nconfirmar asistencia para\nprepararles su menú.\nAl confirmar tu asistencia,\nencontrarás información sobre\nalojamientos cercanos.`;
       } else if (e.paga === 'SoloFiesta') {
         return 'Premium pass!\nSolo debes confirmar asistencia\nhasta el día 8 de octubre.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cernanos.';
       } else if (e.paga === 'Alojamiento') {
@@ -101,9 +71,8 @@ export function TarjetaComp({ datosTarjeta }) {
           textoTarjeta={textoTarjeta}
           frente={frente}
           datosTarjeta={datosTarjeta}
-          activarAnimacion={activarAnimacion}
           rotarManual={rotarManual}
-          cuentaTransf={cuentaTransf}
+          cuentaTransfM={cuentaTransfM}
         />
       </Canvas>
       <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona para voltear</p></div>
@@ -111,13 +80,13 @@ export function TarjetaComp({ datosTarjeta }) {
   );
 }
 
-function Tarjeta3D({ scrollRotation, textoTarjeta, frente, activarAnimacion, rotarManual, cuentaTransf }) {
+function Tarjeta3D({ scrollRotation, textoTarjeta, frente, rotarManual, cuentaTransfM }) {
   const meshRef = useRef();
 
-  const [copiado, setCopiado] = useState('Copiar cuenta')
-  const nCuenta = cuentaTransf
+  const [copiado, setCopiado] = useState('Copiar alias')
+  const nCuenta = cuentaTransfM
   useFrame(() => {
-    if (activarAnimacion && meshRef.current) {
+    if (meshRef.current) {
       meshRef.current.rotation.y = THREE.MathUtils.lerp(
         meshRef.current.rotation.y,
         scrollRotation,
@@ -126,107 +95,126 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, activarAnimacion, rot
     }
   });
 
+
   return (
     <group ref={meshRef}>
-  {/* Tarjeta con rotación */}
-  <group onClick={rotarManual}>
-    <RoundedBox args={[3.8, 2.5, 0.01]} radius={0.02} smoothness={4}>
-      <meshStandardMaterial color="black" metalness={0.9} roughness={0.3} />
-    </RoundedBox>
+      {/* Tarjeta con rotación */}
+      <group onClick={rotarManual}>
+        <RoundedBox args={[3.8, 2.5, 0.01]} radius={0.02} smoothness={4}>
+          <meshStandardMaterial color="black" metalness={0.9} roughness={0.3} />
+        </RoundedBox>
 
-    <Text
-      position={[-1.5, 0.7, 0.045]}
-      font={RobotoMono}
-      fontSize={0.4}
-      color="#E5E4E2"
-      anchorX="start"
-      anchorY="middle"
-    >
-      {'Acceso VIP'}
-    </Text>
+        <Text
+          position={[-1.5, 0.7, 0.045]}
+          font={RobotoMono}
+          fontSize={0.4}
+          color="#E5E4E2"
+          anchorX="start"
+          anchorY="middle"
+        >
+          {'Acceso VIP'}
+        </Text>
 
-    <mesh position={[-0, 0.35, 0.045]}>
-      <planeGeometry args={[3.5, 0.02]} />
-      <meshBasicMaterial color="#E5E4E2" />
-    </mesh>
+        <mesh position={[-0, 0.35, -0.045]}>
+          <planeGeometry args={[3.5, 0.02]} />
+          <meshBasicMaterial color="#E5E4E2" />
+        </mesh>
 
-    <Text
-      position={[-1.5, -0.30, 0.045]}
-      font={RobotoMono}
-      fontSize={0.2}
-      color="#E5E4E2"
-      anchorX="start"
-      anchorY="middle"
-    >
-      {'0901 2021 0811 2025 \n'}
-    </Text>
+        <Text
+          position={[-1.5, -0.30, 0.045]}
+          font={RobotoMono}
+          fontSize={0.2}
+          color="#E5E4E2"
+          anchorX="start"
+          anchorY="middle"
+        >
+          {'0901 2021 0811 2025 \n'}
+        </Text>
 
-    <Text
-      position={[-1.5, -0.6, 0.045]}
-      font={RobotoMono}
-      fontSize={0.17}
-      color="#E5E4E2"
-      anchorX="start"
-      anchorY="middle"
-    >
-      {frente}
-    </Text>
+        <Text
+          position={[-1.5, -0.6, 0.045]}
+          font={RobotoMono}
+          fontSize={0.17}
+          color="#E5E4E2"
+          anchorX="start"
+          anchorY="middle"
+        >
+          {frente}
+        </Text>
 
-    <Text
-      position={[0, -0.85, 0.045]}
-      font={RobotoMono}
-      fontSize={0.08}
-      color="grey"
-      anchorX="start"
-      anchorY="middle"
-    >
-      {'Fecha vencimiento'}
-    </Text>
+        <Text
+          position={[0, -0.85, 0.045]}
+          font={RobotoMono}
+          fontSize={0.08}
+          color="grey"
+          anchorX="start"
+          anchorY="middle"
+        >
+          {'Fecha vencimiento'}
+        </Text>
 
-    <Text
-      position={[0.9, -0.85, 0.045]}
-      font={RobotoMono}
-      fontSize={0.1}
-      color="#E5E4E2"
-      anchorX="start"
-      anchorY="middle"
-    >
-      {'12/25'}
-    </Text>
+        <Text
+          position={[0.9, -0.85, 0.045]}
+          font={RobotoMono}
+          fontSize={0.1}
+          color="#E5E4E2"
+          anchorX="start"
+          anchorY="middle"
+        >
+          {'12/25'}
+        </Text>
 
-    {/* Texto al dorso */}
-    <Text
-      position={[1.5, 0, -0.041]}
-      font={RobotoMono}
-      fontSize={0.15}
-      color="#E5E4E2"
-      rotation={[0, Math.PI, 0]}
-      anchorX="start"
-      anchorY="middle"
-    >
-      {textoTarjeta}
-    </Text>
-  </group>
+        {/* Texto al dorso */}
+        <Text
+          position={[1.5, 0.2, -0.045]}
+          font={RobotoMono}
+          fontSize={0.15}
+          color="#E5E4E2"
+          rotation={[0, Math.PI, 0]}
+          anchorX="start"
+          anchorY="middle"
+        >
+          {textoTarjeta}
+        </Text>
 
-  <Text
-    position={[-0.2, -0.985, -0.05]}
-    font={RobotoMono}
-    fontSize={0.15}
-    color="#E5E4E2"
-    rotation={[0, Math.PI, 0]}
-    anchorX="start"
-    anchorY="middle"
-    onClick={(e) => {
-      e.stopPropagation();
-      navigator.clipboard.writeText(nCuenta);
-      setCopiado('Copiado');
-    }}
-  >
-    {copiado}
-  </Text>
+        <Text
+          position={[1.5, -0.8, -0.045]}
+          font={RobotoMono}
+          fontSize={0.15}
+          color="#E5E4E2"
+          rotation={[0, Math.PI, 0]}
+          anchorX="start"
+          anchorY="middle"
+        >
+          {`Alias: ${cuentaTransfM}`}
+        </Text>
 
-  <ImagenSobreTarjeta />
-</group>
+        <mesh position={[0.9, -1.05, -0.05]} rotation={[0, Math.PI, 0]}>
+          <planeGeometry args={[1.2, 0.2]} />
+          <meshBasicMaterial color="#BEBEBE" />
+        </mesh>
+
+      </group>
+
+      <Text
+        position={[1.45, -1.05, -0.055]}
+        font={RobotoMono}
+        fontSize={0.15}
+        color='black'
+        rotation={[0, Math.PI, 0]}
+        anchorX="start"
+        anchorY="middle"
+        onClick={(e) => {
+          e.stopPropagation();
+          navigator.clipboard.writeText(nCuenta);
+          setCopiado('Copiado ✅');
+        }}
+      >
+        {copiado}
+      </Text>
+
+      <ImagenSobreTarjeta />
+    </group>
 
   );
 }
