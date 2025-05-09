@@ -906,3 +906,11 @@
 .noMB p {
   margin-bottom: 0;
 }
+
+.nombreVa {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-left: -20px;
+}

@@ -569,7 +569,7 @@ export const InvitacionComp = ({ datosOk }) => {
                                     .sort((a, b) => a.nombre.localeCompare(b.nombre))
                                     .map(persona => (
                                         <li key={persona.id}>
-                                            <p className='mb-0 text-center'>{persona.nombre}</p>
+                                            <p className='nombreVa'>{persona.nombre}</p>
                                             <div className='justify-content-around'>
                                                 <div className='text-center'>
                                                     <p className='mb-0 text-center'>Asiste?</p>
