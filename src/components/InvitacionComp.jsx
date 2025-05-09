@@ -161,6 +161,16 @@ export const InvitacionComp = ({ datosOk }) => {
     const handleButtonClick = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    const selectBody = document.querySelector('body')
+
+    useEffect(() => {
+      showModal
+      ? selectBody.classList.add('noScroll')
+      : selectBody.classList.remove('noScroll')
+
+    }, [showModal])
+    
+
     const [vaDormir, setvaDormir] = useState(true)
 
     useEffect(() => {
@@ -348,207 +358,204 @@ export const InvitacionComp = ({ datosOk }) => {
 
     return (
         <>
-
-            <>
-                {/* VISTA INICIAL */}
-                <section>
-                    <div className='primeraVista py-3'>
-                        <Background />
-                        <div className='container relative acomodarCont'>
-                            <svg width="400" height="200" viewBox="0 0 400 200">
-                                <defs>
-                                    <path id="curva" d="M 50 150 Q 200 20, 350 150" fill="transparent" />
-                                </defs>
-                                <text fontSize="24" fill="black">
-                                    <textPath href="#curva" startOffset="50%" textAnchor="middle">
-                                        Nos casamos!
-                                    </textPath>
-                                </text>
-                            </svg>
-                            <img src={logo} width='200' />
-                            <h1 className='py-4'>Melina y Ezequiel</h1>
-                            <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepará tu equipaje <br />para acompañarnos</h2>
-                        </div>
-                    </div>
-                </section>
-                {/* PASAJE DE AVION */}
-                <section className='my-5'>
-                    <div className="billete pb-2">
-                        <img src={verBarra} width="64" className="barra" />
-                        <div className="membPasaje">
-                            <h2>Tarjeta de embarque</h2>
-                            <span>Memuquiel Airlines</span>
-                        </div>
-                        <div className="dato">
-                            <span>Pasajero</span>
-                            <p>{datosOk.apellido}, {datosOk.nombre}</p>
-                        </div>
-                        <div className="dato">
-                            <span>Fecha</span>
-                            <p>08 11 2025</p>
-                        </div>
-                        <div className="dato">
-                            <span>Hora de embarque</span>
-                            <p>19:00hs</p>
-                        </div>
-                        <div className="dato">
-                            <span>Mesa</span>
-                            <p>{datosOk.mesa ? datosOk.mesa : 'N/D'}</p>
-                        </div>
-
-                        <div className="viaje">
-                            <span>Origen</span>
-                            <p>Córdoba</p>
-                        </div>
-                        <img src={boardingPlane} width="64" className="avion" />
-                        <div className="viaje">
-                            <span>Destino</span>
-                            <p>Río Ceballos</p>
-                        </div>
-                    </div>
-                </section>
-                {/* DESTINO */}
-                <section className='destino my-5'>
+            {/* VISTA INICIAL */}
+            <section>
+                <div className='primeraVista py-3'>
                     <Background />
-                    <div className='container'>
-                        <h1>Destino</h1>
-                        <div className='direccion'>
-                            <p className='h2'>Salón Villegas</p>
-                            <p>San Martín 3729, Río Ceballos,
-                                <br />Córdoba, Argentina</p>
-                        </div>
-                        <a
-                            href='https://www.google.com.ar/maps/place/Av.+San+Mart%C3%ADn+3729,+X5111+R%C3%ADo+Ceballos,+C%C3%B3rdoba,+Argentina/@-31.1763868,-64.3148667,19z/data=!3m1!4b1!4m6!3m5!1s0x943281b6463fa893:0xa114e3732333c81c!8m2!3d-31.1763879!4d-64.314223!16s%2Fg%2F11kqtnv3yz?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D'
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <img src={mapa} width='60' />
-                            <img className='pulsa' src={pulsa} width='24' />
-                        </a>
+                    <div className='container relative acomodarCont'>
+                        <svg width="400" height="200" viewBox="0 0 400 200">
+                            <defs>
+                                <path id="curva" d="M 50 150 Q 200 20, 350 150" fill="transparent" />
+                            </defs>
+                            <text fontSize="24" fill="black">
+                                <textPath href="#curva" startOffset="50%" textAnchor="middle">
+                                    Nos casamos!
+                                </textPath>
+                            </text>
+                        </svg>
+                        <img src={logo} width='200' />
+                        <h1 className='py-4'>Melina y Ezequiel</h1>
+                        <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepará tu equipaje <br />para acompañarnos</h2>
                     </div>
-                </section>
-                {/* ITINERARIO */}
-                <section className='my-5'>
-                    <h1 className='text-center'>Itinerario</h1>
-                    <div className='itinerario' ref={itinerarioRef}>
-                        {itinerarioVisible && (
-                            <>
-                                <svg viewBox="0 0 560 150" preserveAspectRatio="xMidYMid meet">
-                                    <path
-                                        id="miCamino"
-                                        d="M0 90 Q 140 0, 280 90 T 560 90"
-                                        fill="transparent"
-                                        stroke="#F6E3BA"
-                                        strokeWidth="2"
-                                        strokeDasharray="596"
-                                        strokeDashoffset="596">
-                                        <animate
-                                            attributeName="stroke-dashoffset"
-                                            from="596"
-                                            to="0"
-                                            dur="5s"
-                                            fill="freeze" />
-                                    </path>
-
-                                    <image href={avionInt} width="34" height="34" x="-17" y="-17">
-                                        <animateMotion
-                                            dur="5s"
-                                            repeatCount="1"
-                                            rotate="auto">
-                                            <mpath href="#miCamino" />
-                                        </animateMotion>
-                                    </image>
-                                </svg>
-                                <div className='ceremonia'><p>Ceremonia</p><img src={anillos} width='25' /><span>19.00hs</span></div>
-                                <div className='recepcion'><p>Recepción</p><img src={recepcion} width='25' /><span>19.30hs</span></div>
-                                <div className='cena'><p>Cena</p><img src={cena} width='25' /><span>20.30hs</span></div>
-                                <div className='fiesta'><p>Fiesta</p><img src={fiesta} width='25' /><span>23.00hs</span></div>
-                            </>
-                        )}
-                    </div>
-                </section>
-                {/* TARJETA */}
-                <section className='my-5'>
-                    <div ref={popUp}>
-                        <TarjetaComp
-                            datosTarjeta={consulta}
-                            scrollRotation={scrollRotation}
-                            cuentaTransfM={cuentaTransfM}
-                        />
-                    </div>
-                </section>
-                {/* SLIDER FOTOS */}
-                <section className='my-5'>
-                    <div ref={comienzaImg}>
-                        <div className="acumulacionFotos" ref={cuantaImg}>
-                            {imagenes.map((img, index) => (
-                                <img
-                                    key={index}
-                                    src={img}
-                                    className={`mifoto ${initialized ? 'animacion' : ''} ${estilosAsignados.current[index] || ''}`}
-                                    alt={`Imagen ${index + 1}`}
-                                />
-                            ))}
-                            <button className='left' onClick={retrocederImagen} disabled={isDisabledbk}><i className="bi bi-chevron-left"></i></button>
-                            <button className='right' onClick={avanzarImagen} disabled={isDisabledfw}><i className="bi bi-chevron-right"></i></button>
-                        </div>
-                    </div>
-                </section>
-                {/* RELOJ DESCUENTO */}
-                <section className='my-5'>
-                    <h1 className='text-center'>Ya se viene la<br />Memuquiel Fest <img src={fiesta} width='40' /></h1>
-                    <Contador />
-                </section>
-                {/* MUSICA */}
-                <section className='container my-5'>
-                    <h1 className='text-center'>Bailemos<br />de todo <img src={bailemos} width='40' /></h1>
-                    <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
-                    <form onSubmit={handleCancion} className='position-relative canciones'>
-                        <input
-                            className='px-2 canciones'
-                            onChange={(e) => setAgregarTema(e.target.value)}
-                            value={agregarTema}
-                            placeholder='Indica nombre o link de tu canción'
-                        />
-                        <button type="submit" className='inputSend'>Enviar</button>
-                        {temaAgregado && <img className='temazo' src={temazo} width='200' />}
-                    </form>
-                </section>
-                {/* VESTIMENTA */}
-                <section className='container relative my-5'>
-                    <h1 className='text-center'>Vestimenta <img src={vestido} width='40' /><img src={camisa} width='40' /></h1>
-                    <p>Elegante sport, así que podes llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitas algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
-                </section>
-                {/* FONDO MEDIO */}
-                <div className='backMiddle'><Background /></div>
-                {/* REGALO */}
-                <section className='container relative my-5'>
-                    <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
-                    <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
-                    <div className='noMB'>
-                        <p className='text-center'>Memu</p>
-                        <div className='d-flex flex-wrap justify-content-around mb-3'>
-                            <p>{cuentaTransfM}</p>
-                            <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfM) && setCopiadoM(('Copiado ✅'))}>{copiadoM}</button>
-                        </div>
-                        <p className='text-center'>Quiel</p>
-                        <div className='d-flex flex-wrap justify-content-around mb-3'>
-                            <p>{cuentaTransfE}</p>
-                            <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfE) && setCopiadoE(('Copiado ✅'))}>{copiadoE}</button>
-                        </div>
-                    </div>
-                </section>
-                {/* FINAL */}
-                <section className='final pb-4' ref={finalPage}>
-                    <Postal datosTarjeta={consulta} />
-                </section>
-
-
-                <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
-                    <button className={`asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'gelatina' : ''} ${!confirmSuccess && 'enviadoBg'}`} type="button" onClick={handleButtonClick}>
-                        <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
-                    </button>
                 </div>
-            </>
+            </section>
+            {/* PASAJE DE AVION */}
+            <section className='my-5'>
+                <div className="billete pb-2">
+                    <img src={verBarra} width="64" className="barra" />
+                    <div className="membPasaje">
+                        <h2>Tarjeta de embarque</h2>
+                        <span>Memuquiel Airlines</span>
+                    </div>
+                    <div className="dato">
+                        <span>Pasajero</span>
+                        <p>{datosOk.apellido}, {datosOk.nombre}</p>
+                    </div>
+                    <div className="dato">
+                        <span>Fecha</span>
+                        <p>08 11 2025</p>
+                    </div>
+                    <div className="dato">
+                        <span>Hora de embarque</span>
+                        <p>19:00hs</p>
+                    </div>
+                    <div className="dato">
+                        <span>Mesa</span>
+                        <p>{datosOk.mesa ? datosOk.mesa : 'N/D'}</p>
+                    </div>
+
+                    <div className="viaje">
+                        <span>Origen</span>
+                        <p>Córdoba</p>
+                    </div>
+                    <img src={boardingPlane} width="64" className="avion" />
+                    <div className="viaje">
+                        <span>Destino</span>
+                        <p>Río Ceballos</p>
+                    </div>
+                </div>
+            </section>
+            {/* DESTINO */}
+            <section className='destino my-5'>
+                <Background />
+                <div className='container'>
+                    <h1>Destino</h1>
+                    <div className='direccion'>
+                        <p className='h2'>Salón Villegas</p>
+                        <p>San Martín 3729, Río Ceballos,
+                            <br />Córdoba, Argentina</p>
+                    </div>
+                    <a
+                        href='https://www.google.com.ar/maps/place/Av.+San+Mart%C3%ADn+3729,+X5111+R%C3%ADo+Ceballos,+C%C3%B3rdoba,+Argentina/@-31.1763868,-64.3148667,19z/data=!3m1!4b1!4m6!3m5!1s0x943281b6463fa893:0xa114e3732333c81c!8m2!3d-31.1763879!4d-64.314223!16s%2Fg%2F11kqtnv3yz?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D'
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <img src={mapa} width='60' />
+                        <img className='pulsa' src={pulsa} width='24' />
+                    </a>
+                </div>
+            </section>
+            {/* ITINERARIO */}
+            <section className='my-5'>
+                <h1 className='text-center'>Itinerario</h1>
+                <div className='itinerario' ref={itinerarioRef}>
+                    {itinerarioVisible && (
+                        <>
+                            <svg viewBox="0 0 560 150" preserveAspectRatio="xMidYMid meet">
+                                <path
+                                    id="miCamino"
+                                    d="M0 90 Q 140 0, 280 90 T 560 90"
+                                    fill="transparent"
+                                    stroke="#F6E3BA"
+                                    strokeWidth="2"
+                                    strokeDasharray="596"
+                                    strokeDashoffset="596">
+                                    <animate
+                                        attributeName="stroke-dashoffset"
+                                        from="596"
+                                        to="0"
+                                        dur="5s"
+                                        fill="freeze" />
+                                </path>
+
+                                <image href={avionInt} width="34" height="34" x="-17" y="-17">
+                                    <animateMotion
+                                        dur="5s"
+                                        repeatCount="1"
+                                        rotate="auto">
+                                        <mpath href="#miCamino" />
+                                    </animateMotion>
+                                </image>
+                            </svg>
+                            <div className='ceremonia'><p>Ceremonia</p><img src={anillos} width='25' /><span>19.00hs</span></div>
+                            <div className='recepcion'><p>Recepción</p><img src={recepcion} width='25' /><span>19.30hs</span></div>
+                            <div className='cena'><p>Cena</p><img src={cena} width='25' /><span>20.30hs</span></div>
+                            <div className='fiesta'><p>Fiesta</p><img src={fiesta} width='25' /><span>23.00hs</span></div>
+                        </>
+                    )}
+                </div>
+            </section>
+            {/* TARJETA */}
+            <section className='my-5'>
+                <div ref={popUp}>
+                    <TarjetaComp
+                        datosTarjeta={consulta}
+                        scrollRotation={scrollRotation}
+                        cuentaTransfM={cuentaTransfM}
+                    />
+                </div>
+            </section>
+            {/* SLIDER FOTOS */}
+            <section className='my-5'>
+                <div ref={comienzaImg}>
+                    <div className="acumulacionFotos" ref={cuantaImg}>
+                        {imagenes.map((img, index) => (
+                            <img
+                                key={index}
+                                src={img}
+                                className={`mifoto ${initialized ? 'animacion' : ''} ${estilosAsignados.current[index] || ''}`}
+                                alt={`Imagen ${index + 1}`}
+                            />
+                        ))}
+                        <button className='left' onClick={retrocederImagen} disabled={isDisabledbk}><i className="bi bi-chevron-left"></i></button>
+                        <button className='right' onClick={avanzarImagen} disabled={isDisabledfw}><i className="bi bi-chevron-right"></i></button>
+                    </div>
+                </div>
+            </section>
+            {/* RELOJ DESCUENTO */}
+            <section className='my-5'>
+                <h1 className='text-center'>Ya se viene la<br />Memuquiel Fest <img src={fiesta} width='40' /></h1>
+                <Contador />
+            </section>
+            {/* MUSICA */}
+            <section className='container my-5'>
+                <h1 className='text-center'>Bailemos<br />de todo <img src={bailemos} width='40' /></h1>
+                <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
+                <form onSubmit={handleCancion} className='position-relative canciones'>
+                    <input
+                        className='px-2 canciones'
+                        onChange={(e) => setAgregarTema(e.target.value)}
+                        value={agregarTema}
+                        placeholder='Indica nombre o link de tu canción'
+                    />
+                    <button type="submit" className='inputSend'>Enviar</button>
+                    {temaAgregado && <img className='temazo' src={temazo} width='200' />}
+                </form>
+            </section>
+            {/* VESTIMENTA */}
+            <section className='container relative my-5'>
+                <h1 className='text-center'>Vestimenta <img src={vestido} width='40' /><img src={camisa} width='40' /></h1>
+                <p>Elegante sport, así que podes llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitas algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
+            </section>
+            {/* FONDO MEDIO */}
+            <div className='backMiddle'><Background /></div>
+            {/* REGALO */}
+            <section className='container relative my-5'>
+                <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
+                <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
+                <div className='noMB'>
+                    <p className='text-center'>Memu</p>
+                    <div className='d-flex flex-wrap justify-content-around mb-3'>
+                        <p>{cuentaTransfM}</p>
+                        <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfM) && setCopiadoM(('Copiado ✅'))}>{copiadoM}</button>
+                    </div>
+                    <p className='text-center'>Quiel</p>
+                    <div className='d-flex flex-wrap justify-content-around mb-3'>
+                        <p>{cuentaTransfE}</p>
+                        <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfE) && setCopiadoE(('Copiado ✅'))}>{copiadoE}</button>
+                    </div>
+                </div>
+            </section>
+            {/* FINAL */}
+            <section className='final pb-4' ref={finalPage}>
+                <Postal datosTarjeta={consulta} />
+            </section>
+
+
+            <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
+                <button className={`asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'gelatina' : ''} ${!confirmSuccess && 'enviadoBg'}`} type="button" onClick={handleButtonClick}>
+                    <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
+                </button>
+            </div>
             <div className={`custom-modal-backdrop ${showModal ? 'mostrar' : 'ocultar'}`} onClick={handleCloseModal}>
                 <div className="custom-modal-content" onClick={(e) => e.stopPropagation()}>
                     <div className="custom-modal-header">
@@ -612,7 +619,6 @@ export const InvitacionComp = ({ datosOk }) => {
                                     Ver opciones de alojamiento
                                 </button>
                             }
-
                             <div className="modal fade otroAlojamiento" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div className="modal-dialog">
                                     <div className="modal-content">
@@ -655,7 +661,7 @@ export const InvitacionComp = ({ datosOk }) => {
                                                     <a href='https://maps.app.goo.gl/Mc37Pbffp73F2NW86' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
                                                 </div>
                                             </div>
-                                            <p>Más información <a href='https://sierraschicas.com/'>aquí</a></p>
+                                            <p>Más información <a href='https://sierraschicas.com/' target='_blank'>aquí</a></p>
                                         </div>
                                         <div className="modal-footer">
                                             <button type="button" className="platinum w-50" data-bs-dismiss="modal">Cerrar</button>
