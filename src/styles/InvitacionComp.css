@@ -530,7 +530,6 @@
     align-items: center;
     justify-content: center;
     z-index: 1050;
-    border: 1px solid #e3c595;
   }
 
   .custom-modal-content {
