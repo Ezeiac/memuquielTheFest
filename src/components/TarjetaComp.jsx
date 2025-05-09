@@ -49,9 +49,9 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
   useEffect(() => {
     const texto = (e) => {
       if (e.paga === 'MediaTarjeta') {
-        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nMenores de 12 años solo deben\nconfirmar asistencia para\nprepararles su menú.\nAl confirmar tu asistencia,\nencontrarás información sobre\nalojamientos cercanos.`;
+        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nEl menú de los menores de 12 años lo\ninvitamos nosotros, por favor\nconfirmar su asistencia.\nEn la confirmacion encontrarás\ninformación sobre alojamientos.`;
       } else if (e.paga === 'SoloFiesta') {
-        return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cercanos.';
+        return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nEn la confirmacion encontrarás\ninformación sobre alojamientos';
       } else if (e.paga === 'Alojamiento') {
         return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nCuentas con noche de alojamiento\ny desayuno incluidos.';
       }
@@ -188,7 +188,7 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, rotarManual, cuentaTr
           </Text>
         }
         <Text
-          position={[1.5, ubiTexto, -0.045]}
+          position={[1.7, ubiTexto, -0.045]}
           font={RobotoMono}
           fontSize={0.15}
           color="#E5E4E2"
@@ -201,7 +201,7 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, rotarManual, cuentaTr
 
         {datosTarjeta.paga == 'MediaTarjeta' &&
           <Text
-            position={[1.5, -0.8, -0.045]}
+            position={[1.7, -0.8, -0.045]}
             font={RobotoMono}
             fontSize={0.15}
             color="#E5E4E2"
@@ -213,7 +213,7 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, rotarManual, cuentaTr
           </Text>}
         {datosTarjeta.paga == 'MediaTarjeta' &&
 
-          <mesh position={[0.9, -1.05, -0.05]} rotation={[0, Math.PI, 0]}>
+          <mesh position={[1.1, -1.05, -0.05]} rotation={[0, Math.PI, 0]}>
             <planeGeometry args={[1.2, 0.2]} />
             <meshBasicMaterial color="#BEBEBE" />
           </mesh>
@@ -222,7 +222,7 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, rotarManual, cuentaTr
 
       {datosTarjeta.paga == 'MediaTarjeta' &&
         <Text
-          position={[1.45, -1.05, -0.055]}
+          position={[1.65, -1.05, -0.055]}
           font={RobotoMono}
           fontSize={0.15}
           color='black'
