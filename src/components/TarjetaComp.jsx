@@ -51,7 +51,7 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
       if (e.paga === 'MediaTarjeta') {
         return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nMenores de 12 años solo deben\nconfirmar asistencia para\nprepararles su menú.\nAl confirmar tu asistencia,\nencontrarás información sobre\nalojamientos cercanos.`;
       } else if (e.paga === 'SoloFiesta') {
-        return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cernanos.';
+        return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nDentro de "Confirmar Asistencia",\nencontrarás información sobre\nalojamientos cercanos.';
       } else if (e.paga === 'Alojamiento') {
         return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nCuentas con noche de alojamiento\ny desayuno incluidos.';
       }
