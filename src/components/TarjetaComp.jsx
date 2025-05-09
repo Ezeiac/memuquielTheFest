@@ -184,7 +184,7 @@ function Tarjeta3D({ scrollRotation, textoTarjeta, frente, rotarManual, cuentaTr
             anchorX="start"
             anchorY="middle"
           >
-            {'Premuim Pass'}
+            {'Premium Pass'}
           </Text>
         }
         <Text
