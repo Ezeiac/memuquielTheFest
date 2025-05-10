@@ -103,11 +103,3 @@
   flex-wrap: nowrap;
   width: 100%;
 }
-
-.pressTarjeta p {
-  font-family: 'Roboto Tarjeta', monospace;
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.274);
-  margin-bottom: 0;
-  text-align: center;
-}

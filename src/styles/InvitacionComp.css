@@ -17,7 +17,7 @@
   }
 
   .canciones input {
-    background-color: #F6E3BA ;
+    background-color: #F6E3BA;
     border: 0;
     color: black;
     border-radius: 8px;
@@ -26,7 +26,7 @@
   .canciones input::placeholder {
     color: black;
   }
-  
+
   .sugerencias {
     padding: 4px;
     background-image: url('/src/assets/images/backPass.jpg');
@@ -270,9 +270,8 @@
 
   .pulsa {
     position: absolute;
-    top: 65%;
+    top: -24px;
     left: 50%;
-    animation: bounce 2s ease infinite;
     transform: translate(-50%, 0%);
   }
 
@@ -289,6 +288,15 @@
   .pressTarjeta.chauText {
     opacity: 0;
   }
+
+  .pressTarjeta p {
+    font-family: 'Roboto Tarjeta', monospace;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.274);
+    margin-bottom: 0;
+    text-align: center;
+  }
+
 
   @keyframes bounce {
     70% {
@@ -428,14 +436,6 @@
     }
   }
 
-  .asistir {
-    background-color: #F6E3BA;
-    border-radius: 50%;
-    padding: 10px;
-    border: 1px solid #DFCAA0;
-    transition: all 0.4s;
-  }
-
   .asistir.enviadoBg {
     background-color: rgba(76, 175, 80, 0.3);
     border: 1px solid rgba(76, 175, 80, 0.8);
@@ -448,19 +448,62 @@
     position: fixed;
     transform: translateY(calc(100% + 45px));
     z-index: 99;
+    overflow: hidden;
+    border-radius: 50px;
   }
-
 
   .flotante.aparecer {
     transform: translateY(0);
   }
 
-  .asistir.gelatina {
-    animation: gelatine 3s 5 1s;
+  .animacionButton {
+    animation: widthAnimation 2s 8s forwards, gelatine 3s infinite 12s;
+  }
+
+  .flotante p {
+    padding: 10px;
+    background-color: #F6E3BA;
+    border-radius: 8px;
+    white-space: nowrap;
+    padding-right: 57px;
+    color: black;
+  }
+
+  .animacionButton p {
+    opacity: 0;
+    transition: opacity 1s;
+    transition-delay: 10s;
+  }
+
+  .asistir {
+    background-color: #F6E3BA;
+    border: 0;
+    transition: all 0.4s;
+    height: 57px;
+
+  }
+
+  .asistir img {
+    position: absolute;
+    height: 57px;
+    width: 57px;
+    right: 0px;
+    background-color: #F6E3BA;
+    z-index: 1;
+    padding: 10px;
+  }
+
+  @keyframes widthAnimation {
+    from {
+      width: 260px;
+    }
+
+    to {
+      width: 57px;
+    }
   }
 
   @keyframes gelatine {
-
     from,
     to {
       transform: scale(1, 1);
@@ -476,46 +519,6 @@
 
     15% {
       transform: scale(0.95, 1.05);
-    }
-  }
-
-  @media (min-width:400px) {
-    .flotante {
-      bottom: 10px;
-      right: calc(50%);
-      transform: translate(200px, calc(100% + 45px));
-    }
-
-    .flotante.aparecer {
-      bottom: 10px;
-      right: calc(50%);
-      transform: translate(200px, 0);
-    }
-
-    .asistir.gelatina {
-      bottom: 10px;
-      right: calc(50%);
-      animation: gelatinedt 3s 5 1s;
-    }
-
-    @keyframes gelatinedt {
-
-      from,
-      to {
-        transform: scale(1, 1)
-      }
-
-      5% {
-        transform: scale(0.9, 1.1);
-      }
-
-      10% {
-        transform: scale(1.1, 0.9);
-      }
-
-      15% {
-        transform: scale(0.95, 1.05);
-      }
     }
   }
 
@@ -712,7 +715,7 @@
   }
 
   .otroAlojamiento.show {
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0, 0, 0, 0.7);
   }
 
   .otroAlojamiento .modal-dialog {
@@ -872,44 +875,104 @@
     font-style: normal;
   }
 
-.postalTD {
-  position: relative;
-}
+  .postalTD {
+    position: relative;
+  }
 
 
-.doScroll {
-  touch-action: auto !important;
-  pointer-events: auto !important;
-}
+  .doScroll {
+    touch-action: auto !important;
+    pointer-events: auto !important;
+  }
 
-.touch {
-  position: absolute;
-  top: 0;
-  right: 20px;
-  opacity: 0.5;
-  transition: all 1s;
-}
+  .touch {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    opacity: 0.5;
+    transition: all 1s;
+  }
 
-.touch.opacar {
-  opacity: 1;
-}
+  .touch.opacar {
+    opacity: 1;
+  }
 
-.copiar {
+  .copiar {
     text-decoration: none;
     border: 0;
     background-color: transparent;
     color: #4f4638;
     padding: 0;
-}
+  }
 
-.noMB p {
-  margin-bottom: 0;
-}
+  .noMB p {
+    margin-bottom: 0;
+  }
 
-.nombreVa {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 0;
-  margin-left: -20px;
-}
+  .nombreVa {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-left: -20px;
+  }
+
+  .primeraVista i {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce2 2s ease infinite;
+    opacity: 1;
+    transition: opacity 1s;
+  }
+
+  .primeraVista i.desvanecer {
+    opacity: 0;
+  }
+
+  @media (min-width:1200px) {
+    h1 {
+      font-size: 54px;
+    }
+  }
+
+  @media (min-width:400px) {
+    .flotante {
+      bottom: 10px;
+      right: calc(50%);
+      transform: translate(200px, calc(100% + 45px));
+    }
+
+    .flotante.aparecer {
+      bottom: 10px;
+      right: calc(50%);
+      transform: translate(200px, 0);
+    }
+
+    .asistir.gelatina {
+      bottom: 10px;
+      right: calc(50%);
+      animation: gelatinedt 3s 5 1s;
+    }
+
+    @keyframes gelatinedt {
+
+      from,
+      to {
+        transform: scale(1, 1)
+      }
+
+      5% {
+        transform: scale(0.9, 1.1);
+      }
+
+      10% {
+        transform: scale(1.1, 0.9);
+      }
+
+      15% {
+        transform: scale(0.95, 1.05);
+      }
+    }
+  }

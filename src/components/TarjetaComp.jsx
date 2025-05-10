@@ -30,8 +30,6 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
 
   const [chauText, setChauText] = useState(false)
 
-  const [noRota, setNoRota] = useState(true)
-
   const rotarManual = () => {
     if (scrollRotation) {
       setScrollRotation(0)
@@ -74,7 +72,7 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
           cuentaTransfM={cuentaTransfM}
         />
       </Canvas>
-      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona para voltear</p></div>
+      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona para<br/>voltear</p></div>
     </div>
   );
 }

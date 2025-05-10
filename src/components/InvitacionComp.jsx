@@ -164,12 +164,12 @@ export const InvitacionComp = ({ datosOk }) => {
     const selectBody = document.querySelector('body')
 
     useEffect(() => {
-      showModal
-      ? selectBody.classList.add('noScroll')
-      : selectBody.classList.remove('noScroll')
+        showModal
+            ? selectBody.classList.add('noScroll')
+            : selectBody.classList.remove('noScroll')
 
     }, [showModal])
-    
+
 
     const [vaDormir, setvaDormir] = useState(true)
 
@@ -349,6 +349,22 @@ export const InvitacionComp = ({ datosOk }) => {
         }
     }, [viewFinalPage]);
 
+    const [flechaPrincipal, setFlechaPrincipal] = useState(true)
+    const flechaOculta = useRef(false);
+
+    useEffect(() => {
+        const manejarScroll = () => {
+            if (window.scrollY !== 0 && !flechaOculta.current) {
+                setFlechaPrincipal(false);
+                flechaOculta.current = true;
+            }
+        };
+
+        window.addEventListener('scroll', manejarScroll);
+        return () => window.removeEventListener('scroll', manejarScroll);
+    }, []);
+
+
     const [copiadoM, setCopiadoM] = useState('Copiar alias')
     const [copiadoE, setCopiadoE] = useState('Copiar alias')
 
@@ -374,9 +390,10 @@ export const InvitacionComp = ({ datosOk }) => {
                             </text>
                         </svg>
                         <img src={logo} width='200' />
-                        <h1 className='py-4'>Melina y Ezequiel</h1>
+                        <h1 className='py-4 text-center'>Melina y Ezequiel</h1>
                         <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepará tu equipaje <br />para acompañarnos</h2>
                     </div>
+                    <i className={`bi bi-chevron-double-down ${flechaPrincipal ? undefined : 'desvanecer'}`}></i>
                 </div>
             </section>
             {/* PASAJE DE AVION */}
@@ -425,13 +442,18 @@ export const InvitacionComp = ({ datosOk }) => {
                         <p>San Martín 3729, Río Ceballos,
                             <br />Córdoba, Argentina</p>
                     </div>
-                    <a
-                        href='https://www.google.com.ar/maps/place/Av.+San+Mart%C3%ADn+3729,+X5111+R%C3%ADo+Ceballos,+C%C3%B3rdoba,+Argentina/@-31.1763868,-64.3148667,19z/data=!3m1!4b1!4m6!3m5!1s0x943281b6463fa893:0xa114e3732333c81c!8m2!3d-31.1763879!4d-64.314223!16s%2Fg%2F11kqtnv3yz?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D'
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <img src={mapa} width='60' />
-                        <img className='pulsa' src={pulsa} width='24' />
-                    </a>
+                    <div onClick={(e) => e.currentTarget.querySelector('.pressTarjeta')?.classList.add('chauText')}>
+                        <a
+                            href='https://www.google.com.ar/maps/place/Av.+San+Mart%C3%ADn+3729,+X5111+R%C3%ADo+Ceballos,+C%C3%B3rdoba,+Argentina/@-31.1763868,-64.3148667,19z/data=!3m1!4b1!4m6!3m5!1s0x943281b6463fa893:0xa114e3732333c81c!8m2!3d-31.1763879!4d-64.314223!16s%2Fg%2F11kqtnv3yz?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D'
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <img src={mapa} width='60' />
+                        </a>
+                        <div className='pressTarjeta'>
+                            <img className='pulsa' src={pulsa} width='24' />
+                            <p>Presiona para<br />abrir Maps</p>
+                        </div>
+                    </div>
                 </div>
             </section>
             {/* ITINERARIO */}
@@ -551,10 +573,13 @@ export const InvitacionComp = ({ datosOk }) => {
             </section>
 
 
-            <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
-                <button className={`asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'gelatina' : ''} ${!confirmSuccess && 'enviadoBg'}`} type="button" onClick={handleButtonClick}>
-                    <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
-                </button>
+            <div className={`flotante ${(entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
+                <div className={`${entryPopUp && 'animacionButton gelatina'}`}>
+                    <button className={`d-flex align-items-center asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? '' : ''} ${!confirmSuccess ? 'enviadoBg' : ''}`} type="button" onClick={handleButtonClick}>
+                        <p className='mb-0'>Confirma tu asistencia aquí</p>
+                        <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
+                    </button>
+                </div>
             </div>
             <div className={`custom-modal-backdrop ${showModal ? 'mostrar' : 'ocultar'}`} onClick={handleCloseModal}>
                 <div className="custom-modal-content" onClick={(e) => e.stopPropagation()}>
