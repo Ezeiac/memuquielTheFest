@@ -24,7 +24,6 @@ import bailemos from '../assets/icons/baile.png';
 import vestido from '../assets/icons/vestido.png';
 import camisa from '../assets/icons/camisa.png';
 import regalo from '../assets/icons/regalo.png';
-import { element } from 'three/tsl';
 
 export const InvitacionComp = ({ datosOk }) => {
 
@@ -88,12 +87,17 @@ export const InvitacionComp = ({ datosOk }) => {
             if (errorGrupo) {
                 console.error('Error al obtener los datos del grupo:', errorGrupo.message);
             } else {
-                setGrupoFlia(grupoCompleto);
+                const grupoOrdenado = [
+                    ...grupoCompleto.filter(p => p.nombre === datosOk.nombre && p.apellido === datosOk.apellido),
+                    ...grupoCompleto.filter(p => !(p.nombre === datosOk.nombre && p.apellido === datosOk.apellido)),
+                ];
+
+                setGrupoFlia(grupoOrdenado);
+
                 const initialChecked = {};
                 const initialDuerme = {};
-                grupoCompleto.forEach((persona) => {
+                grupoOrdenado.forEach((persona) => {
                     initialChecked[persona.id] = persona.confirm === null ? true : persona.confirm;
-
                     if (persona.paga === "Alojamiento") {
                         initialDuerme[persona.id] = persona.duerme === null ? true : persona.duerme;
                     }
@@ -101,6 +105,7 @@ export const InvitacionComp = ({ datosOk }) => {
                 setCheckedItems(initialChecked);
                 setDuermeItems(initialDuerme);
             }
+
         };
 
         fetchGrupoYFamilia();
@@ -365,12 +370,19 @@ export const InvitacionComp = ({ datosOk }) => {
     }, []);
 
 
+    const [animButton, setanimButton] = useState(false)
     const [copiadoM, setCopiadoM] = useState('Copiar alias')
     const [copiadoE, setCopiadoE] = useState('Copiar alias')
 
     // CUENTAS
-    const cuentaTransfM = '000000000000000M'
-    const cuentaTransfE = '000000000000000E'
+    const aliasm1 = ''
+    const aliasm2 = ''
+    const aliasm3 = ''
+    const aliase1 = ''
+    const aliase2 = ''
+    const aliase3 = ''
+    const cuentaTransfM = aliasm1 + '.' + aliasm2 + aliasm3
+    const cuentaTransfE = aliase1 + aliase2 + aliase3
 
     return (
         <>
@@ -417,8 +429,8 @@ export const InvitacionComp = ({ datosOk }) => {
                         <p>19:00hs</p>
                     </div>
                     <div className="dato">
-                        <span>Mesa</span>
-                        <p>{datosOk.mesa ? datosOk.mesa : 'N/D'}</p>
+                        <span>Nº Mesa</span>
+                        <p>{!isNaN(datosOk.mesa) && datosOk.mesa !== null ? datosOk.mesa : 'N/D'}</p>
                     </div>
 
                     <div className="viaje">
@@ -451,7 +463,7 @@ export const InvitacionComp = ({ datosOk }) => {
                         </a>
                         <div className='pressTarjeta'>
                             <img className='pulsa' src={pulsa} width='24' />
-                            <p>Presiona para<br />abrir Maps</p>
+                            <p>Presiona el mapa<br />para abrir la ubicación</p>
                         </div>
                     </div>
                 </div>
@@ -546,23 +558,23 @@ export const InvitacionComp = ({ datosOk }) => {
             {/* VESTIMENTA */}
             <section className='container relative my-5'>
                 <h1 className='text-center'>Vestimenta <img src={vestido} width='40' /><img src={camisa} width='40' /></h1>
-                <p>Elegante sport, así que podes llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitas algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
+                <p>Elegante sport, así que podés llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitás algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
             </section>
             {/* FONDO MEDIO */}
             <div className='backMiddle'><Background /></div>
             {/* REGALO */}
             <section className='container relative my-5'>
                 <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
-                <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabes qué, te dejamos nuestras cuentas:</p>
+                <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabés qué, te dejamos nuestras cuentas:</p>
                 <div className='noMB'>
-                    <p className='text-center'>Memu</p>
-                    <div className='d-flex flex-wrap justify-content-around mb-3'>
-                        <p>{cuentaTransfM}</p>
+                    <p className='text-center fw-bold'>Memu</p>
+                    <div className='d-flex flex-wrap justify-content-between mb-3'>
+                        <p>Alias: {cuentaTransfM}</p>
                         <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfM) && setCopiadoM(('Copiado ✅'))}>{copiadoM}</button>
                     </div>
-                    <p className='text-center'>Quiel</p>
-                    <div className='d-flex flex-wrap justify-content-around mb-3'>
-                        <p>{cuentaTransfE}</p>
+                    <p className='text-center fw-bold'>Quiel</p>
+                    <div className='d-flex flex-wrap justify-content-between mb-3'>
+                        <p>Alias: {cuentaTransfE}</p>
                         <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfE) && setCopiadoE(('Copiado ✅'))}>{copiadoE}</button>
                     </div>
                 </div>
@@ -571,12 +583,10 @@ export const InvitacionComp = ({ datosOk }) => {
             <section className='final pb-4' ref={finalPage}>
                 <Postal datosTarjeta={consulta} />
             </section>
-
-
-            <div className={`flotante ${(entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
-                <div className={`${entryPopUp && 'animacionButton gelatina'}`}>
+            <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
+                <div className={`${animButton ? 'animacionButton' : ''}`} onClick={() => setanimButton(true)}>
                     <button className={`d-flex align-items-center asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? '' : ''} ${!confirmSuccess ? 'enviadoBg' : ''}`} type="button" onClick={handleButtonClick}>
-                        <p className='mb-0'>Confirma tu asistencia aquí</p>
+                        <p className='mb-0'>Confirmá tu asistencia aquí</p>
                         <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
                     </button>
                 </div>
@@ -591,10 +601,9 @@ export const InvitacionComp = ({ datosOk }) => {
                         <ul>
                             {grupoFlia.length > 0 ? (
                                 grupoFlia
-                                    .sort((a, b) => a.nombre.localeCompare(b.nombre))
                                     .map(persona => (
                                         <li key={persona.id}>
-                                            <p className='nombreVa'>{persona.nickname}</p>
+                                            <p className='nombreVa'>{persona.nickname.normalize()}</p>
                                             <div className='justify-content-around'>
                                                 <div className='text-center'>
                                                     <p className='mb-0 text-center'>Asiste?</p>
@@ -611,7 +620,7 @@ export const InvitacionComp = ({ datosOk }) => {
                                                 {persona.paga === "Alojamiento" && (
                                                     <div className='d-flex flex-column align-items-center'>
                                                         <div className='text-center'>
-                                                            <p className='mb-0 text-center'>¿Se queda a dormir?</p>
+                                                            <p className='mb-0 text-center'>Se queda a dormir?</p>
                                                             <label className="switch-container">
                                                                 <input
                                                                     className="m-2"
@@ -635,7 +644,7 @@ export const InvitacionComp = ({ datosOk }) => {
                     </div>
                     <div className="custom-modal-footer">
                         <span>
-                            Si eres vegetariano o tienes alguna alergia/intolerancia, avísanos al momento de confirmar
+                            Si eres vegetariano o tienes alguna alergia/intolerancia, escribinos por whatsapp
                         </span>
                         <div>
                             <button className='platinum w-100' onClick={handleConfirm}>Confirmar asistencia</button>

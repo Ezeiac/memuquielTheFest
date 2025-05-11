@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Fuse from 'fuse.js';
 
 export const FormComp = ({
@@ -25,10 +25,21 @@ export const FormComp = ({
   const [tipoSugerencia, setTipoSugerencia] = useState('');
   const inputRef = useRef(null);
   const [inputWidth, setInputWidth] = useState(0);
-  const posicionLeft = ((inputWidth * recorrido) / 100) + 70 * (1 - recorrido / 100);
   const storageFN = localStorage.getItem('nombre');
 
-  const handleSubmit = (event = null) => {
+  const posicionLeft = useMemo(() => {
+    return ((inputWidth * recorrido) / 100) + 70 * (1 - recorrido / 100);
+  }, [inputWidth, recorrido]);
+
+  const normalizarTexto = (texto) => {
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase().trim();
+};
+
+
+const handleSubmit = useCallback((event = null) => {
     if (event) event.preventDefault();
 
     if (!formEnviado && recorrido > 0) {
@@ -57,54 +68,49 @@ export const FormComp = ({
     }
 
     const apellidoExacto = invitado.filter(user =>
-      user.apellido.toLowerCase() === inputText.toLowerCase()
+      normalizarTexto(user.apellido) === normalizarTexto(inputText)
     );
 
-    if (apellidoExacto.length > 0) {
-      const coincidenciaExacta = apellidoExacto.find(user =>
-        user.nombre.toLowerCase() === nombre.toLowerCase()
-      );
+    const coincidenciaExacta = apellidoExacto.find(user =>
+      normalizarTexto(user.nombre) === normalizarTexto(nombre)
+    );
 
-      if (coincidenciaExacta) {
-        window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
-        
-        setInvitadoValido(coincidenciaExacta);
-        setEsError('');
-        setFormEnviado(true);
-        setShowSugerencias(false);
-  
-        window.localStorage.setItem('apellido', inputText);
-        window.localStorage.setItem('nombre', nombre);
-        window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
-        return;
-      }
-
-      const fuseNombre = new Fuse(apellidoExacto, {
-        keys: ['nombre'],
-        threshold: 0.4,
-      });
-
-      const resultados = fuseNombre.search(nombre);
-
-      if (resultados.length > 0) {
-        const sugerenciasNombres = resultados.map(r => r.item.nombre);
-        const nombresUnicos = [...new Set(sugerenciasNombres)];
-        setSugerencias(nombresUnicos);
-        setTipoSugerencia('nombre');
-        setInvitadoValido(null);
-        setFormEnviado(false);
-        setShowSugerencias(true);
-      } else {
-        setSugerencias([]);
-        setEsError('No se encontraron nombres similares.');
-        setInvitadoValido(null);
-        setFormEnviado(false);
-        setShowSugerencias(false);
-      }
-
+    if (coincidenciaExacta) {
+      window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
+      setInvitadoValido(coincidenciaExacta);
+      setEsError('');
+      setFormEnviado(true);
+      setShowSugerencias(false);
+      window.localStorage.setItem('apellido', inputText);
+      window.localStorage.setItem('nombre', nombre);
+      window.localStorage.setItem('nickname', coincidenciaExacta.nickname);
       return;
     }
 
+    const fuseNombre = new Fuse(apellidoExacto, {
+      keys: ['nombre'],
+      threshold: 0.4,
+    });
+
+    const resultados = fuseNombre.search(nombre);
+
+    if (resultados.length > 0) {
+      const sugerenciasNombres = resultados.map(r => r.item.nombre);
+      const nombresUnicos = [...new Set(sugerenciasNombres)];
+      setSugerencias(nombresUnicos);
+      setTipoSugerencia('nombre');
+      setInvitadoValido(null);
+      setFormEnviado(false);
+      setShowSugerencias(true);
+    } else {
+      setSugerencias([]);
+      setEsError('No se encontraron nombres similares.');
+      setInvitadoValido(null);
+      setFormEnviado(false);
+      setShowSugerencias(false);
+    }
+
+    // Aquí estaba el error de falta de cierre
     const fuseApellido = new Fuse(invitado, {
       keys: ['apellido'],
       threshold: 0.4,
@@ -126,22 +132,15 @@ export const FormComp = ({
       setFormEnviado(false);
       setShowSugerencias(false);
     }
-  };
+}, [formEnviado, recorrido, inputText, nombre, invitado, setRecorrido, setInvitadoValido, setFormEnviado, setEsError, setSugerencias]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setHideElement('d-none');
-    }, 2000);
-  }, [formEnviado]);
-
-  const verUso = (input) => {
-    const valor = Number(input.target.value);
-    setRecorrido(valor);
-
-    if (valor >= 100) {
-      handleSubmit();
+    if (formEnviado) {
+      setTimeout(() => {
+        setHideElement('d-none');
+      }, 2000);
     }
-  };
+  }, [formEnviado]);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -149,7 +148,14 @@ export const FormComp = ({
     }
   }, [recorrido]);
 
-  
+  const verUso = (input) => {
+    const valor = Number(input.target.value);
+    setRecorrido(valor);
+
+    if (valor >= 80) {
+      handleSubmit();
+    }
+  };
 
   return (
     <div>
@@ -166,7 +172,7 @@ export const FormComp = ({
                     id="nombre"
                     placeholder={placeNombre}
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    onChange={(e) => setNombre(e.target.value.trimStart())}
                     minLength="4"
                     className={errorStyle}
                     autoComplete='off'
@@ -179,7 +185,7 @@ export const FormComp = ({
                     id="apellido"
                     placeholder={placeApellido}
                     value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
+                    onChange={(e) => setInputText(e.target.value.trimStart())}
                     minLength="4"
                     className={errorStyle}
                     autoComplete='off'
@@ -214,7 +220,6 @@ export const FormComp = ({
           {esError && <div className="esError">{esError}</div>}
         </div>
       </form>
-
 
       {showSugerencias && sugerencias.length > 0 && (
         <div className="container modal1" tabIndex="-1">

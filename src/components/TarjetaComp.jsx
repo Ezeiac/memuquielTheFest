@@ -23,6 +23,7 @@ function ImagenSobreTarjeta() {
 
 export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
   const frente = `${datosTarjeta.nombre} ${datosTarjeta.apellido}`;
+  const nombre = frente.toUpperCase()
   const [textoTarjeta, setTextoTarjeta] = useState('');
 
   const [tarjetaSeccion, setTarjetaSeccion] = useState(false);
@@ -47,11 +48,11 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
   useEffect(() => {
     const texto = (e) => {
       if (e.paga === 'MediaTarjeta') {
-        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde el 8 de julio).\nEl menú de los menores de 12 años lo\ninvitamos nosotros, por favor\nconfirmar su asistencia.\nEn la confirmacion encontrarás\ninformación sobre alojamientos.`;
+        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde julio).\nEl menú de los menores de 12 años lo\ninvitamos nosotros, por favor\nconfirmar su asistencia.\nEn la confirmación encontrarás\ninformación sobre alojamientos.`;
       } else if (e.paga === 'SoloFiesta') {
-        return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nEn la confirmacion encontrarás\ninformación sobre alojamientos';
+        return 'Solo debés confirmar asistencia\nhasta el día 8 de octubre.\nEn la confirmación encontrarás\ninformación sobre alojamientos';
       } else if (e.paga === 'Alojamiento') {
-        return 'Solo debes confirmar asistencia\nhasta el día 8 de octubre.\nCuentas con noche de alojamiento\ny desayuno incluidos.';
+        return 'Solo debés confirmar asistencia\nhasta el día 8 de octubre.\nContás con noche de alojamiento\ny desayuno incluidos.';
       }
     };
     setTextoTarjeta(texto(datosTarjeta));
@@ -66,13 +67,13 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
         <Tarjeta3D
           scrollRotation={scrollRotation}
           textoTarjeta={textoTarjeta}
-          frente={frente}
+          frente={nombre}
           datosTarjeta={datosTarjeta}
           rotarManual={rotarManual}
           cuentaTransfM={cuentaTransfM}
         />
       </Canvas>
-      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona para<br/>voltear</p></div>
+      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona la tarjeta<br/>para voltear</p></div>
     </div>
   );
 }
