@@ -48,11 +48,11 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
   useEffect(() => {
     const texto = (e) => {
       if (e.paga === 'MediaTarjeta') {
-        return `La tarjeta tiene un valor de\n$75.000 (actualizable por inflación\ndesde julio).\nEl menú de los menores de 12 años lo\ninvitamos nosotros, por favor\nconfirmar su asistencia.\nEn la confirmación encontrarás\ninformación sobre alojamientos.`;
+        return `Podrás confirmar tu asistencia hasta\nel 1 de octubre. La tarjeta tiene un\nvalor de $77.500 (precio actualizado\nde julio).\nLos menores de 12 años tiene un menú\nespecial, que invitamos nosotros,\npor favor confirmanos su asistencia.`;
       } else if (e.paga === 'SoloFiesta') {
-        return 'Solo debés confirmar asistencia\nhasta el día 8 de octubre.\nEn la confirmación encontrarás\ninformación sobre alojamientos';
+        return 'Solo debés confirmar asistencia\nhasta el día 1 de octubre.\nEn la confirmación encontrarás\ninformación sobre alojamientos';
       } else if (e.paga === 'Alojamiento') {
-        return 'Solo debés confirmar asistencia\nhasta el día 8 de octubre.\nContás con noche de alojamiento\ny desayuno incluidos.';
+        return 'Solo debés confirmar asistencia\nhasta el día 1 de octubre.\nContás con noche de alojamiento\ny desayuno incluidos.';
       }
     };
     setTextoTarjeta(texto(datosTarjeta));

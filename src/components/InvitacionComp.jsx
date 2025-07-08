@@ -152,7 +152,6 @@ export const InvitacionComp = ({ datosOk }) => {
         setConfirmSuccess('Confirmación enviada');
         setShowModal(false);
 
-
         setTimeout(() => {
             setConfirmSuccess(false);
         }, 800);
@@ -160,7 +159,6 @@ export const InvitacionComp = ({ datosOk }) => {
         setTimeout(() => {
             setConfirmSuccess(true);
         }, 3000);
-
     };
 
     const handleButtonClick = () => setShowModal(true);
@@ -182,7 +180,6 @@ export const InvitacionComp = ({ datosOk }) => {
         const conId = consulta && consulta.duerme
         setvaDormir(conId)
     }, [consulta])
-
 
     const cuantaImg = useRef()
     const imagenesRef = useRef([])
@@ -375,12 +372,12 @@ export const InvitacionComp = ({ datosOk }) => {
     const [copiadoE, setCopiadoE] = useState('Copiar alias')
 
     // CUENTAS
-    const aliasm1 = ''
-    const aliasm2 = ''
-    const aliasm3 = ''
-    const aliase1 = ''
-    const aliase2 = ''
-    const aliase3 = ''
+    const aliasm1 = 'Boda'
+    const aliasm2 = 'Memu'
+    const aliasm3 = 'quiel'
+    const aliase1 = 'eze'
+    const aliase2 = 'iac'
+    const aliase3 = 'bru'
     const cuentaTransfM = aliasm1 + '.' + aliasm2 + aliasm3
     const cuentaTransfE = aliase1 + aliase2 + aliase3
 
@@ -634,6 +631,7 @@ export const InvitacionComp = ({ datosOk }) => {
                                                     </div>
                                                 )}
                                             </div>
+                                            {persona.duerme != null && persona.confirm != null && <p className='text-center'>{persona.nickname}, hemos recibido tu respuesta.<br />Muchas gracias.</p>}
                                             <hr />
                                         </li>
                                     ))
@@ -648,7 +646,7 @@ export const InvitacionComp = ({ datosOk }) => {
                         </span>
                         <div>
                             <button className='platinum w-100' onClick={handleConfirm}>Confirmar asistencia</button>
-                            {(vaDormir === false || (consulta.paga !== 'Alojamiento' && vaDormir === true)) &&
+                            {(vaDormir === false || vaDormir === null || (consulta.paga !== 'Alojamiento' && vaDormir === true)) &&
                                 <button type="button" className="platinum w-100 mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Ver opciones de alojamiento
                                 </button>

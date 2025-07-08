@@ -102,6 +102,7 @@ const handleSubmit = useCallback((event = null) => {
       setInvitadoValido(null);
       setFormEnviado(false);
       setShowSugerencias(true);
+      return;
     } else {
       setSugerencias([]);
       setEsError('No se encontraron nombres similares.');
@@ -110,7 +111,6 @@ const handleSubmit = useCallback((event = null) => {
       setShowSugerencias(false);
     }
 
-    // Aquí estaba el error de falta de cierre
     const fuseApellido = new Fuse(invitado, {
       keys: ['apellido'],
       threshold: 0.4,
