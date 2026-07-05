@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import supabase from '../supabaseClient';
 
-export const useFetch = () => {
+export const useFetch = (connect = true) => {
     const [invitado, setinvitado] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
     useEffect(() => {
+        if (!connect) {
+            setLoading(false);
+            return;
+        }
+        
         const fetchUsers = async () => {
             const { data, error } = await supabase
                 .from('ConfirmacionInv')

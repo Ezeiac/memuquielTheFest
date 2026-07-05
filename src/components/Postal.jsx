@@ -12,8 +12,10 @@ import { Canvas, } from '@react-three/fiber';
 export const Postal = ({ datosTarjeta }) => {
     const [textoTarjeta, setTextoTarjeta] = useState('');
 
+    const imgPostal = datosTarjeta.links ? 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1200&auto=format&fit=crop' : postal 
+
     function ImagenSobreTarjeta() {
-        const texture = useLoader(TextureLoader, postal);
+        const texture = useLoader(TextureLoader, imgPostal);
         return (
             <mesh position={[0, 0.25, 0.01]}>
                 <planeGeometry args={[3, 3]} />
@@ -25,7 +27,7 @@ export const Postal = ({ datosTarjeta }) => {
     function ImagenInsta() {
         const texture = useLoader(TextureLoader, insta);
         return (
-            <group onClick={() => window.open('https://www.instagram.com/memuquielfest?igsh=ZGpqbmFsbXV4YW5y')} rotation={[0, Math.PI, 0]}>
+            <group onClick={() => window.open('#')} rotation={[0, Math.PI, 0]}>
                 <mesh position={[-1.4, -1.6, 0.012]}>
                     <planeGeometry args={[0.55, 0.5]} />
                     <meshBasicMaterial map={texture} transparent />
@@ -108,7 +110,7 @@ export const Postal = ({ datosTarjeta }) => {
                                 anchorY="middle"
                                 lineHeight='1.5'
                             >
-                                {'Hecho con amor por Memuquiel'}
+                                {`Hecho con amor por ${datosTarjeta.festName ?? "Memuquiel"}`}
                             </Text>
                         </group>
                         <OrbitControls enablePan={false} enableZoom={false} />

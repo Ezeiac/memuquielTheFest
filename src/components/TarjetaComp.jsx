@@ -47,8 +47,10 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
 
   useEffect(() => {
     const texto = (e) => {
-      if (e.paga === 'MediaTarjeta') {
-        return `Podrás confirmar tu asistencia hasta\nel 1 de octubre. La tarjeta tiene un\nvalor de $77.500 (precio actualizado\nde julio).\nLos menores de 12 años tiene un menú\nespecial, que invitamos nosotros,\npor favor confirmanos su asistencia.`;
+      if (datosTarjeta.nombre === "demo") {
+        return 'Solo debés confirmar asistencia\nhasta el xx/xx/xx.\nContás con noche de alojamiento\ny desayuno incluidos.';
+      } else if (e.paga === 'MediaTarjeta') {
+        return `Podrás confirmar tu asistencia hasta\nel 1 de octubre. La tarjeta tiene un\nvalor de $82.000 (precio actualizado\nde septiembre).\nLos menores de 12 años tiene un menú\nespecial, que invitamos nosotros,\npor favor confirmanos su asistencia.`;
       } else if (e.paga === 'SoloFiesta') {
         return 'Solo debés confirmar asistencia\nhasta el día 1 de octubre.\nEn la confirmación encontrarás\ninformación sobre alojamientos';
       } else if (e.paga === 'Alojamiento') {
@@ -73,7 +75,7 @@ export function TarjetaComp({ datosTarjeta, cuentaTransfM }) {
           cuentaTransfM={cuentaTransfM}
         />
       </Canvas>
-      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona la tarjeta<br/>para voltear</p></div>
+      <div className={`pressTarjeta ${chauText ? 'chauText' : ''}`}><img className='pulsaTarj' src={pulsa} width='24' /><p>Presiona la tarjeta<br />para voltear</p></div>
     </div>
   );
 }

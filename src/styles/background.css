@@ -4,8 +4,8 @@
     overflow: hidden;
     position: absolute;
     margin: auto;
-    top: 25%;
-    transform: translateY(-25%);
+    top: 50%;
+    transform: translateY(-50%);
     z-index: -1;
   }
   

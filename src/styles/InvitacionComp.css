@@ -215,12 +215,28 @@
     padding-right: 4px;
   }
 
-  .viaje:nth-of-type(1) {
+  .dato.vip {
+    grid-column: 2;
+    grid-row: 5;
+    padding-right: 4px;
+  }
+
+  .dato.datoHab {
+    grid-row: 5;
     grid-column: 4;
     padding-right: 4px;
   }
 
-  .viaje:nth-of-type(3) {
+  .viaje {
+    grid-row: 8;
+  }
+
+  .viaje.origen {
+    grid-column: 2;
+    padding-right: 4px;
+  }
+
+  .viaje.destino {
     grid-column: 4;
     padding-right: 4px;
   }
@@ -234,11 +250,42 @@
     width: 50px;
     margin: 0 2vw;
     transform: translateX(-50%);
+    grid-row: 8;
+    grid-column: 3;
   }
 
   .relative {
     z-index: 1;
     position: relative;
+  }
+
+  .bg-colorLg {
+    background-color: #fff8e5;
+  }
+
+  .infoInv {
+    border-radius: 50px;
+    left: calc(50%);
+    right: 10px;
+    transform: translateX(-50%);
+    z-index: 99;
+    width: calc(100% - 20px);
+    max-width: 380px;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+  }
+
+  .infoInv div {
+    text-align: center;
+    align-content: center;
+  }
+
+  .infoInv a {
+    text-align: center;
+    align-content: center;
+    width: 62px;
+    min-height: 62px;
+    justify-self: end;
   }
 
   .backMiddle {
@@ -283,6 +330,7 @@
     top: 92%;
     opacity: 1;
     transition: opacity 1s;
+    text-align: center;
   }
 
   .pressTarjeta.chauText {
@@ -508,6 +556,7 @@
   }
 
   @keyframes gelatine {
+
     from,
     to {
       transform: scale(1, 1);
@@ -873,6 +922,14 @@
     padding-left: 8px;
   }
 
+  .okTarjeta {
+    text-decoration: none;
+    border: 0;
+    background-color: #F6E3BA;
+    color: #4f4638;
+    padding-left: 8px;
+  }
+
   .permanent-marker-regular {
     font-family: "Permanent Marker", cursive;
     font-weight: 400;
@@ -936,6 +993,21 @@
     opacity: 0;
   }
 
+  .checkInModal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+    padding: 8px;
+    max-width: 380px;
+    width: 80%;
+  }
+
+  .verPopUp {
+    opacity: 0;
+  }
+
   @media (min-width:1200px) {
     h1 {
       font-size: 54px;
@@ -980,4 +1052,36 @@
         transform: scale(0.95, 1.05);
       }
     }
+  }
+
+  @media (max-width: 400px) {
+    .infoInv {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      text-align: center;
+    }
+
+    .infoInv div:nth-child(1) {
+      grid-column: span 1;
+      grid-row: 1;
+      justify-self: center;
+      width: 100%;
+    }
+
+    .infoInv div:nth-child(2) {
+      grid-column: span 2;
+      grid-row: 2;
+      justify-self: center;
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .infoInv a {
+      grid-column: 2 / 3;
+      grid-row: 1;
+      justify-self: center;
+      min-width: 62px;
+      height: fit-content;
+    }
+
   }

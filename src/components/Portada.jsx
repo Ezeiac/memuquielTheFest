@@ -18,6 +18,7 @@ export const Portada = ({
     recorrido, setRecorrido
   } = estados;
 
+
   useEffect(() => {
     if (recorrido >= 100 && formEnviado) {
       setTimeout(() => {

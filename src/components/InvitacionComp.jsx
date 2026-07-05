@@ -25,7 +25,7 @@ import vestido from '../assets/icons/vestido.png';
 import camisa from '../assets/icons/camisa.png';
 import regalo from '../assets/icons/regalo.png';
 
-export const InvitacionComp = ({ datosOk }) => {
+export const InvitacionComp = ({ datosOk, connect }) => {
 
     const [grupoFlia, setGrupoFlia] = useState([]);
     const [nGrupo, setNGrupo] = useState(null);
@@ -62,53 +62,56 @@ export const InvitacionComp = ({ datosOk }) => {
     });
 
     useEffect(() => {
-        const fetchGrupoYFamilia = async () => {
-            if (!datosOk) return;
+        if (connect) {
 
-            const { data: persona, error: errorPersona } = await supabase
-                .from('ConfirmacionInv')
-                .select('grupo')
-                .eq('apellido', datosOk.apellido)
-                .eq('nombre', datosOk.nombre)
-                .single();
+            const fetchGrupoYFamilia = async () => {
+                if (!datosOk) return;
 
-            if (errorPersona) {
-                console.error('Error buscando grupo del invitado:', errorPersona.message);
-                return;
-            }
+                const { data: persona, error: errorPersona } = await supabase
+                    .from('ConfirmacionInv')
+                    .select('grupo')
+                    .eq('apellido', datosOk.apellido)
+                    .eq('nombre', datosOk.nombre)
+                    .single();
 
-            setNGrupo(persona.grupo);
+                if (errorPersona) {
+                    console.error('Error buscando grupo del invitado:', errorPersona.message);
+                    return;
+                }
 
-            const { data: grupoCompleto, error: errorGrupo } = await supabase
-                .from('ConfirmacionInv')
-                .select('*')
-                .eq('grupo', persona.grupo);
+                setNGrupo(persona.grupo);
 
-            if (errorGrupo) {
-                console.error('Error al obtener los datos del grupo:', errorGrupo.message);
-            } else {
-                const grupoOrdenado = [
-                    ...grupoCompleto.filter(p => p.nombre === datosOk.nombre && p.apellido === datosOk.apellido),
-                    ...grupoCompleto.filter(p => !(p.nombre === datosOk.nombre && p.apellido === datosOk.apellido)),
-                ];
+                const { data: grupoCompleto, error: errorGrupo } = await supabase
+                    .from('ConfirmacionInv')
+                    .select('*')
+                    .eq('grupo', persona.grupo);
 
-                setGrupoFlia(grupoOrdenado);
+                if (errorGrupo) {
+                    console.error('Error al obtener los datos del grupo:', errorGrupo.message);
+                } else {
+                    const grupoOrdenado = [
+                        ...grupoCompleto.filter(p => p.nombre === datosOk.nombre && p.apellido === datosOk.apellido),
+                        ...grupoCompleto.filter(p => !(p.nombre === datosOk.nombre && p.apellido === datosOk.apellido)),
+                    ];
 
-                const initialChecked = {};
-                const initialDuerme = {};
-                grupoOrdenado.forEach((persona) => {
-                    initialChecked[persona.id] = persona.confirm === null ? true : persona.confirm;
-                    if (persona.paga === "Alojamiento") {
-                        initialDuerme[persona.id] = persona.duerme === null ? true : persona.duerme;
-                    }
-                });
-                setCheckedItems(initialChecked);
-                setDuermeItems(initialDuerme);
-            }
+                    setGrupoFlia(grupoOrdenado);
 
-        };
+                    const initialChecked = {};
+                    const initialDuerme = {};
+                    grupoOrdenado.forEach((persona) => {
+                        initialChecked[persona.id] = persona.confirm === null ? true : persona.confirm;
+                        if (persona.paga === "Alojamiento") {
+                            initialDuerme[persona.id] = persona.duerme === null ? true : persona.duerme;
+                        }
+                    });
+                    setCheckedItems(initialChecked);
+                    setDuermeItems(initialDuerme);
+                }
 
-        fetchGrupoYFamilia();
+            };
+
+            fetchGrupoYFamilia();
+        }
     }, [datosOk]);
 
     const updateConfirmacion = async (id, confirm) => {
@@ -265,27 +268,35 @@ export const InvitacionComp = ({ datosOk }) => {
         }
     }, [currentImageIndex])
 
-    const imagenes = [
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/1.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/IMG-20250127-WA0036_rfowjb.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img8_sfncp8.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img13_qig7s3.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img4_oxowmc.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img3_s2g6xs.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img12_kp3prj.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/t_sintorta/v1746579139/img1_tvvqu1.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img6_slp6tf.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img10_ciqgbi.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img11_qmz35c.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725204/img7_kwuym3.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img5_vgjbns.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725141/IMG-20250127-WA0028_cci0bm.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725140/IMG-20250127-WA0032_uiugpb.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725136/IMG-20250127-WA0018_tkefvw.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725119/img3_riod1m.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746724986/Imagen_de_WhatsApp_2025-05-07_a_las_15.38.05_575285fc_pqvcir.jpg',
-        'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746694954/1f64d4db_rjlijk.jpg'
-    ];
+    const imagenes = datosOk.links
+        ? [
+            'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1200&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1532712938310-34cb3982ef74?q=80&w=1200&auto=format&fit=crop',
+        ]
+        :
+        [
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/1.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579141/IMG-20250127-WA0036_rfowjb.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img8_sfncp8.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img13_qig7s3.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img4_oxowmc.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img3_s2g6xs.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579140/img12_kp3prj.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/t_sintorta/v1746579139/img1_tvvqu1.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img6_slp6tf.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img10_ciqgbi.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img11_qmz35c.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725204/img7_kwuym3.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746579139/img5_vgjbns.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725141/IMG-20250127-WA0028_cci0bm.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725140/IMG-20250127-WA0032_uiugpb.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725136/IMG-20250127-WA0018_tkefvw.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746725119/img3_riod1m.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746724986/Imagen_de_WhatsApp_2025-05-07_a_las_15.38.05_575285fc_pqvcir.jpg',
+            'https://res.cloudinary.com/dlxpsuvvr/image/upload/v1746694954/1f64d4db_rjlijk.jpg'
+        ]
 
     const [agregarTema, setAgregarTema] = useState('')
     const [temaAgregado, settemaAgregado] = useState(false)
@@ -325,12 +336,15 @@ export const InvitacionComp = ({ datosOk }) => {
 
         if (!agregarTema.trim()) return;
 
-        const temaData = {
-            track: agregarTema.trim(),
-            fecha: new Date().toISOString()
-        };
+        if (datosOk.links) {
 
-        await guardarCancion(temaData);
+            const temaData = {
+                track: agregarTema.trim(),
+                fecha: new Date().toISOString()
+            };
+
+            await guardarCancion(temaData);
+        }
 
         setTimeout(() => {
             setAgregarTema('');
@@ -340,7 +354,6 @@ export const InvitacionComp = ({ datosOk }) => {
 
         setTimeout(() => {
             settemaAgregado(false)
-
         }, 3000);
     };
 
@@ -367,344 +380,406 @@ export const InvitacionComp = ({ datosOk }) => {
     }, []);
 
 
+    const now = Date.now()
+    const deadLine = new Date(2030, 9, 1)
+
     const [animButton, setanimButton] = useState(false)
     const [copiadoM, setCopiadoM] = useState('Copiar alias')
     const [copiadoE, setCopiadoE] = useState('Copiar alias')
 
-    // CUENTAS
-    const aliasm1 = 'Boda'
-    const aliasm2 = 'Memu'
-    const aliasm3 = 'quiel'
-    const aliase1 = 'eze'
-    const aliase2 = 'iac'
-    const aliase3 = 'bru'
-    const cuentaTransfM = aliasm1 + '.' + aliasm2 + aliasm3
-    const cuentaTransfE = aliase1 + aliase2 + aliase3
+    const tarjetaEmbarque = useRef()
+
+    const [modalMesa, setModalMesa] = useState(true)
+
+    const handleScroll = () => {
+        setModalMesa(false)
+        tarjetaEmbarque.current?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     return (
         <>
-            {/* VISTA INICIAL */}
-            <section>
-                <div className='primeraVista py-3'>
-                    <Background />
-                    <div className='container relative acomodarCont'>
-                        <svg width="400" height="200" viewBox="0 0 400 200">
-                            <defs>
-                                <path id="curva" d="M 50 150 Q 200 20, 350 150" fill="transparent" />
-                            </defs>
-                            <text fontSize="24" fill="black">
-                                <textPath href="#curva" startOffset="50%" textAnchor="middle">
-                                    Nos casamos!
-                                </textPath>
-                            </text>
-                        </svg>
-                        <img src={logo} width='200' />
-                        <h1 className='py-4 text-center'>Melina y Ezequiel</h1>
-                        <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepará tu equipaje <br />para acompañarnos</h2>
-                    </div>
-                    <i className={`bi bi-chevron-double-down ${flechaPrincipal ? undefined : 'desvanecer'}`}></i>
-                </div>
-            </section>
-            {/* PASAJE DE AVION */}
-            <section className='my-5'>
-                <div className="billete pb-2">
-                    <img src={verBarra} width="64" className="barra" />
-                    <div className="membPasaje">
-                        <h2>Tarjeta de embarque</h2>
-                        <span>Memuquiel Airlines</span>
-                    </div>
-                    <div className="dato">
-                        <span>Pasajero</span>
-                        <p>{datosOk.apellido}, {datosOk.nombre}</p>
-                    </div>
-                    <div className="dato">
-                        <span>Fecha</span>
-                        <p>08 11 2025</p>
-                    </div>
-                    <div className="dato">
-                        <span>Hora de embarque</span>
-                        <p>19:00hs</p>
-                    </div>
-                    <div className="dato">
-                        <span>Nº Mesa</span>
-                        <p>{!isNaN(datosOk.mesa) && datosOk.mesa !== null ? datosOk.mesa : 'N/D'}</p>
-                    </div>
-
-                    <div className="viaje">
-                        <span>Origen</span>
-                        <p>Córdoba</p>
-                    </div>
-                    <img src={boardingPlane} width="64" className="avion" />
-                    <div className="viaje">
-                        <span>Destino</span>
-                        <p>Río Ceballos</p>
+            {now < deadLine &&
+                <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
+                    <div className={`${animButton ? 'animacionButton' : ''}`} onClick={() => setanimButton(true)}>
+                        <button className={`d-flex align-items-center asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? '' : ''} ${!confirmSuccess ? 'enviadoBg' : ''}`} type="button" onClick={handleButtonClick}>
+                            <p className='mb-0'>Confirmá tu asistencia aquí</p>
+                            <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
+                        </button>
                     </div>
                 </div>
-            </section>
-            {/* DESTINO */}
-            <section className='destino my-5'>
-                <Background />
-                <div className='container'>
-                    <h1>Destino</h1>
-                    <div className='direccion'>
-                        <p className='h2'>Salón Villegas</p>
-                        <p>San Martín 3729, Río Ceballos,
-                            <br />Córdoba, Argentina</p>
-                    </div>
-                    <div onClick={(e) => e.currentTarget.querySelector('.pressTarjeta')?.classList.add('chauText')}>
-                        <a
-                            href='https://www.google.com.ar/maps/place/Av.+San+Mart%C3%ADn+3729,+X5111+R%C3%ADo+Ceballos,+C%C3%B3rdoba,+Argentina/@-31.1763868,-64.3148667,19z/data=!3m1!4b1!4m6!3m5!1s0x943281b6463fa893:0xa114e3732333c81c!8m2!3d-31.1763879!4d-64.314223!16s%2Fg%2F11kqtnv3yz?entry=ttu&g_ep=EgoyMDI1MDQzMC4xIKXMDSoJLDEwMjExNDUzSAFQAw%3D%3D'
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <img src={mapa} width='60' />
-                        </a>
-                        <div className='pressTarjeta'>
-                            <img className='pulsa' src={pulsa} width='24' />
-                            <p>Presiona el mapa<br />para abrir la ubicación</p>
+            }
+            {/* AVISO NO CONFIRMADOS */}
+            {!datosOk.confirm ?
+                <section>
+                    <div className='primeraVista py-3'>
+                        <Background />
+                        <div className='container relative acomodarCont'>
+                            <img src={logo} width='120' />
+                            <h1 className='h2 text-center'>
+                                Entendemos que a veces los tiempos no coinciden y nos hubiese encantado que embarques con nosotros en este vuelo especial. Como el plazo de confirmación ya cerró, en esta ocasión no podremos despegar juntos, pero esperamos verte en nuestro próximo viaje.
+                            </h1>
                         </div>
                     </div>
-                </div>
-            </section>
-            {/* ITINERARIO */}
-            <section className='my-5'>
-                <h1 className='text-center'>Itinerario</h1>
-                <div className='itinerario' ref={itinerarioRef}>
-                    {itinerarioVisible && (
-                        <>
-                            <svg viewBox="0 0 560 150" preserveAspectRatio="xMidYMid meet">
-                                <path
-                                    id="miCamino"
-                                    d="M0 90 Q 140 0, 280 90 T 560 90"
-                                    fill="transparent"
-                                    stroke="#F6E3BA"
-                                    strokeWidth="2"
-                                    strokeDasharray="596"
-                                    strokeDashoffset="596">
-                                    <animate
-                                        attributeName="stroke-dashoffset"
-                                        from="596"
-                                        to="0"
-                                        dur="5s"
-                                        fill="freeze" />
-                                </path>
+                </section>
+                :
+                <>
+                    {/* VISTA INICIAL */}
+                    <section>
+                        {/* <div className={`checkInModal bg-colorLg rounded-3 ${!modalMesa && 'verPopUp'}`}>
+                            <div className='text-center'>Tu viaje está confirmado!!<br /> Verificá la información en tu tarjeta de embarque</div>
+                            <div className='text-center mt-2'>
+                                <button className='okTarjeta rounded-3 p-2' onClick={handleScroll}>Ir a la tarjeta</button>
+                            </div>
+                        </div> */}
 
-                                <image href={avionInt} width="34" height="34" x="-17" y="-17">
-                                    <animateMotion
-                                        dur="5s"
-                                        repeatCount="1"
-                                        rotate="auto">
-                                        <mpath href="#miCamino" />
-                                    </animateMotion>
-                                </image>
-                            </svg>
-                            <div className='ceremonia'><p>Ceremonia</p><img src={anillos} width='25' /><span>19.00hs</span></div>
-                            <div className='recepcion'><p>Recepción</p><img src={recepcion} width='25' /><span>19.30hs</span></div>
-                            <div className='cena'><p>Cena</p><img src={cena} width='25' /><span>20.30hs</span></div>
-                            <div className='fiesta'><p>Fiesta</p><img src={fiesta} width='25' /><span>23.00hs</span></div>
-                        </>
-                    )}
-                </div>
-            </section>
-            {/* TARJETA */}
-            <section className='my-5'>
-                <div ref={popUp}>
-                    <TarjetaComp
-                        datosTarjeta={consulta}
-                        scrollRotation={scrollRotation}
-                        cuentaTransfM={cuentaTransfM}
-                    />
-                </div>
-            </section>
-            {/* SLIDER FOTOS */}
-            <section className='my-5'>
-                <div ref={comienzaImg}>
-                    <div className="acumulacionFotos" ref={cuantaImg}>
-                        {imagenes.map((img, index) => (
-                            <img
-                                key={index}
-                                src={img}
-                                className={`mifoto ${initialized ? 'animacion' : ''} ${estilosAsignados.current[index] || ''}`}
-                                alt={`Imagen ${index + 1}`}
+                        <div className='primeraVista py-3'>
+                            <Background />
+                            <div className='container relative acomodarCont'>
+                                <svg width="400" height="200" viewBox="0 0 400 200">
+                                    <defs>
+                                        <path id="curva" d="M 50 150 Q 200 20, 350 150" fill="transparent" />
+                                    </defs>
+                                    <text fontSize="24" fill="black">
+                                        <textPath href="#curva" startOffset="50%" textAnchor="middle">
+                                            Nos casamos!
+                                        </textPath>
+                                    </text>
+                                </svg>
+                                <img src={logo} width='200' />
+                                <h1 className='py-4 text-center'>{`${datosOk.wife ?? "Melina"} y ${datosOk.husband ?? "Ezequiel"}`}</h1>
+                                <h2 className='h4 text-end align-self-end'><img className='me-1' src={maleta} width='40' />Prepará tu equipaje <br />para acompañarnos</h2>
+                            </div>
+                            <i className={`bi bi-chevron-double-down ${flechaPrincipal ? undefined : 'desvanecer'}`}></i>
+                        </div>
+                    </section>
+                    {/* PASAJE DE AVION */}
+                    <section className='my-5 py-3' ref={tarjetaEmbarque}>
+                        <div className="billete pb-2">
+                            <img src={verBarra} width="64" className="barra" />
+                            <div className="membPasaje">
+                                <h2>Tarjeta de embarque</h2>
+                                <span>{datosOk.festName ?? "Memuquiel"} Airlines</span>
+                            </div>
+                            <div className="dato">
+                                <span>Pasajero</span>
+                                <p>{datosOk.apellido}, {datosOk.nombre}</p>
+                            </div>
+                            <div className="dato">
+                                <span>Fecha</span>
+                                <p>{datosOk.fecha ?? "08 11 2025"}</p>
+                            </div>
+                            <div className="dato">
+                                <span>Hora de embarque</span>
+                                <p>19:00hs</p>
+                            </div>
+                            <div className="dato">
+                                <span>Nº Mesa</span>
+                                <p>{!isNaN(datosOk.mesa) && datosOk.mesa !== null ? datosOk.mesa : 'N/D'}</p>
+                            </div>
+                            {datosOk.duerme && (datosOk.apellido != "Saredo"
+                                ? <>
+                                    <div className="dato vip">
+                                        <span>Ingreso al VIP</span>
+                                        <p>Desde 16hs</p>
+                                    </div>
+                                    <div className="dato datoHab">
+                                        <span>Habitación Nº</span>
+                                        <p>{datosOk.habitacion}<br />
+                                            <span> (Desayuno 10hs)</span>
+                                        </p>
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    <div className="dato vip">
+                                        <span>Ingreso al hotel</span>
+                                        <p>Desde 14hs</p>
+                                        <a
+                                            href='https://maps.app.goo.gl/jPyf3xvi9GHaJZo18'
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className='text-decoration-none fw-normal' style={{ fontSize: '12px' }}>
+                                            <div className=' pt-2'>Como llegar?<i class="bi bi-geo-alt-fill"></i></div>
+                                        </a>
+                                    </div>
+                                    <div className="dato datoHab">
+                                        <span>Habitación Superior</span>
+                                        <p>Presentate con DNI</p>
+                                    </div>
+                                </>)
+                            }
+
+                            <div className="viaje origen">
+                                <span>Origen</span>
+                                <p>{datosOk.origen ?? "Córdoba"}</p>
+                            </div>
+                            <img src={boardingPlane} width="64" className="avion" />
+                            <div className="viaje destino">
+                                <span>Destino</span>
+                                <p>{datosOk.destino ?? "Destino"}</p>
+                            </div>
+                        </div>
+                    </section>
+                    {/* DESTINO */}
+                    <section className='destino my-5'>
+                        <Background />
+                        <div className='container'>
+                            <h1>Destino</h1>
+                            <div className='direccion'>
+                                <p className='h2'>{datosOk.salon ?? "Salón Villegas"}</p>
+                                <p>{datosOk.direccion ?? "San Martín 3729, Río Ceballos,"}
+                                    <br />{datosOk.direccion2 ?? "Córdoba, Argentina"}</p>
+                            </div>
+                            <div onClick={(e) => e.currentTarget.querySelector('.pressTarjeta')?.classList.add('chauText')}>
+                                <a
+                                    href={datosOk.links ?? 'https://www.google.com.ar/maps/@-31.1763926,-64.3141235,3a,75y,255.96h,84.09t/data=!3m7!1e1!3m5!1sKLM-vB2uaqHVH2MTHyeJ9A!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D5.90757201421782%26panoid%3DKLM-vB2uaqHVH2MTHyeJ9A%26yaw%3D255.95770359651277!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D'}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <img src={mapa} width='60' />
+                                </a>
+                                <div className='pressTarjeta'>
+                                    <img className='pulsa' src={pulsa} width='24' />
+                                    <p>Presiona el mapa<br />para abrir la ubicación</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    {/* ITINERARIO */}
+                    <section className='my-5'>
+                        <h1 className='text-center'>Itinerario</h1>
+                        <div className='itinerario' ref={itinerarioRef}>
+                            {itinerarioVisible && (
+                                <>
+                                    <svg viewBox="0 0 560 150" preserveAspectRatio="xMidYMid meet">
+                                        <path
+                                            id="miCamino"
+                                            d="M0 90 Q 140 0, 280 90 T 560 90"
+                                            fill="transparent"
+                                            stroke="#F6E3BA"
+                                            strokeWidth="2"
+                                            strokeDasharray="596"
+                                            strokeDashoffset="596">
+                                            <animate
+                                                attributeName="stroke-dashoffset"
+                                                from="596"
+                                                to="0"
+                                                dur="5s"
+                                                fill="freeze" />
+                                        </path>
+
+                                        <image href={avionInt} width="34" height="34" x="-17" y="-17">
+                                            <animateMotion
+                                                dur="5s"
+                                                repeatCount="1"
+                                                rotate="auto">
+                                                <mpath href="#miCamino" />
+                                            </animateMotion>
+                                        </image>
+                                    </svg>
+                                    <div className='ceremonia'><p>Ceremonia</p><img src={anillos} width='25' /><span>19.00hs</span></div>
+                                    <div className='recepcion'><p>Recepción</p><img src={recepcion} width='25' /><span>19.30hs</span></div>
+                                    <div className='cena'><p>Cena</p><img src={cena} width='25' /><span>20.30hs</span></div>
+                                    <div className='fiesta'><p>Fiesta</p><img src={fiesta} width='25' /><span>23.00hs</span></div>
+                                </>
+                            )}
+                        </div>
+                    </section>
+                    {/* TARJETA */}
+                    <section className='my-5'>
+                        <div ref={popUp}>
+                            <TarjetaComp
+                                datosTarjeta={consulta}
+                                scrollRotation={scrollRotation}
+                                cuentaTransfM={"Alias1"}
                             />
-                        ))}
-                        <button className='left' onClick={retrocederImagen} disabled={isDisabledbk}><i className="bi bi-chevron-left"></i></button>
-                        <button className='right' onClick={avanzarImagen} disabled={isDisabledfw}><i className="bi bi-chevron-right"></i></button>
-                    </div>
-                </div>
-            </section>
-            {/* RELOJ DESCUENTO */}
-            <section className='my-5'>
-                <h1 className='text-center'>Ya se viene la<br />Memuquiel Fest <img src={fiesta} width='40' /></h1>
-                <Contador />
-            </section>
-            {/* MUSICA */}
-            <section className='container my-5'>
-                <h1 className='text-center'>Bailemos<br />de todo <img src={bailemos} width='40' /></h1>
-                <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
-                <form onSubmit={handleCancion} className='position-relative canciones'>
-                    <input
-                        className='px-2 canciones'
-                        onChange={(e) => setAgregarTema(e.target.value)}
-                        value={agregarTema}
-                        placeholder='Indica nombre o link de tu canción'
-                    />
-                    <button type="submit" className='inputSend'>Enviar</button>
-                    {temaAgregado && <img className='temazo' src={temazo} width='200' />}
-                </form>
-            </section>
-            {/* VESTIMENTA */}
-            <section className='container relative my-5'>
-                <h1 className='text-center'>Vestimenta <img src={vestido} width='40' /><img src={camisa} width='40' /></h1>
-                <p>Elegante sport, así que podés llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitás algunas ideas, nosotros las sacamos de <a href='https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed' target='_blank'>acá</a>.</p>
-            </section>
-            {/* FONDO MEDIO */}
-            <div className='backMiddle'><Background /></div>
-            {/* REGALO */}
-            <section className='container relative my-5'>
-                <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
-                <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabés qué, te dejamos nuestras cuentas:</p>
-                <div className='noMB'>
-                    <p className='text-center fw-bold'>Memu</p>
-                    <div className='d-flex flex-wrap justify-content-between mb-3'>
-                        <p>Alias: {cuentaTransfM}</p>
-                        <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfM) && setCopiadoM(('Copiado ✅'))}>{copiadoM}</button>
-                    </div>
-                    <p className='text-center fw-bold'>Quiel</p>
-                    <div className='d-flex flex-wrap justify-content-between mb-3'>
-                        <p>Alias: {cuentaTransfE}</p>
-                        <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText(cuentaTransfE) && setCopiadoE(('Copiado ✅'))}>{copiadoE}</button>
-                    </div>
-                </div>
-            </section>
-            {/* FINAL */}
-            <section className='final pb-4' ref={finalPage}>
-                <Postal datosTarjeta={consulta} />
-            </section>
-            <div className={`flotante ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? 'aparecer' : ''}`}>
-                <div className={`${animButton ? 'animacionButton' : ''}`} onClick={() => setanimButton(true)}>
-                    <button className={`d-flex align-items-center asistir ${viewPopUp || (entryPopUp && entryPopUp.boundingClientRect.y < 0) ? '' : ''} ${!confirmSuccess ? 'enviadoBg' : ''}`} type="button" onClick={handleButtonClick}>
-                        <p className='mb-0'>Confirmá tu asistencia aquí</p>
-                        <img src={confirmSuccess ? confirm : check} width='35' alt="Confirmar" />
-                    </button>
-                </div>
-            </div>
-            <div className={`custom-modal-backdrop ${showModal ? 'mostrar' : 'ocultar'}`} onClick={handleCloseModal}>
-                <div className="custom-modal-content" onClick={(e) => e.stopPropagation()}>
-                    <div className="custom-modal-header">
-                        <h2 className='mb-0'>Confirmación de asistencia</h2>
-                        <button className="custom-btn-close" onClick={handleCloseModal}><i className="bi bi-chevron-down"></i></button>
-                    </div>
-                    <div className="custom-modal-body">
-                        <ul>
-                            {grupoFlia.length > 0 ? (
-                                grupoFlia
-                                    .map(persona => (
-                                        <li key={persona.id}>
-                                            <p className='nombreVa'>{persona.nickname.normalize()}</p>
-                                            <div className='justify-content-around'>
-                                                <div className='text-center'>
-                                                    <p className='mb-0 text-center'>Asiste?</p>
-                                                    <label className="switch-container">
-                                                        <input
-                                                            className="m-2"
-                                                            type="checkbox"
-                                                            checked={checkedItems[persona.id] || false}
-                                                            onChange={() => changeStatus(persona.id)}
-                                                        />
-                                                        <span className="sliderCheck festejar" />
-                                                    </label>
-                                                </div>
-                                                {persona.paga === "Alojamiento" && (
-                                                    <div className='d-flex flex-column align-items-center'>
+                        </div>
+                    </section>
+                    {/* SLIDER FOTOS */}
+                    <section className='my-5'>
+                        <div ref={comienzaImg}>
+                            <div className="acumulacionFotos" ref={cuantaImg}>
+                                {imagenes.map((img, index) => (
+                                    <img
+                                        key={index}
+                                        src={img}
+                                        className={`mifoto ${initialized ? 'animacion' : ''} ${estilosAsignados.current[index] || ''}`}
+                                        alt={`Imagen ${index + 1}`}
+                                    />
+                                ))}
+                                <button className='left' onClick={retrocederImagen} disabled={isDisabledbk}><i className="bi bi-chevron-left"></i></button>
+                                <button className='right' onClick={avanzarImagen} disabled={isDisabledfw}><i className="bi bi-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </section>
+                    {/* RELOJ DESCUENTO */}
+                    <section className='my-5'>
+                        <h1 className='text-center'>Ya se viene la<br />{datosOk.festName ?? "Memuquiel"} Fest <img src={fiesta} width='40' /></h1>
+                        <Contador />
+                    </section>
+                    {/* MUSICA */}
+                    <section className='container my-5'>
+                        <h1 className='text-center'>Bailemos<br />de todo <img src={bailemos} width='40' /></h1>
+                        <p>Esta noche queremos que nos muestres tus pasos prohibidos, recomendanos tus canciones favoritas para que la fiesta sea aún mejor.</p>
+                        <form onSubmit={handleCancion} className='position-relative canciones'>
+                            <input
+                                className='px-2 canciones'
+                                onChange={(e) => setAgregarTema(e.target.value)}
+                                value={agregarTema}
+                                placeholder='Indica nombre o link de tu canción'
+                            />
+                            <button type="submit" className='inputSend'>Enviar</button>
+                            {temaAgregado && <img className='temazo' src={temazo} width='200' />}
+                        </form>
+                    </section>
+                    {/* VESTIMENTA */}
+                    <section className='container relative my-5'>
+                        <h1 className='text-center'>Vestimenta <img src={vestido} width='40' /><img src={camisa} width='40' /></h1>
+                        <p>Elegante sport, así que podés llevar lo que te haga sentir más cómodo. Shhh!! No digas nada, pero si necesitás algunas ideas, nosotros las sacamos de <a href={datosOk.link ?? 'https://es.pinterest.com/search/pins/?q=invitados%20outfit%20casual&rs=typed'} target='_blank'>acá</a>.</p>
+                    </section>
+                    {/* FONDO MEDIO */}
+                    <div className='backMiddle'><Background /></div>
+                    {/* REGALO */}
+                    <section className='container relative my-5'>
+                        <h1 className='text-center'>Regalos <img src={regalo} width='40' /></h1>
+                        <p>Ya nos diste el mejor regalo por venir a celebrar nuestro amor, pero si todavía te quedaron ganas y no sabés qué, te dejamos nuestras cuentas:</p>
+                        <div className='noMB'>
+                            <p className='text-center fw-bold'>{datosOk.wife ?? "Memu"}</p>
+                            <div className='d-flex flex-wrap justify-content-between mb-3'>
+                                <p>Alias: Alias1</p>
+                                <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText("Alias1") && setCopiadoM(('Copiado ✅'))}>{copiadoM}</button>
+                            </div>
+                            <p className='text-center fw-bold'>{datosOk.husband ?? "Quiel"}</p>
+                            <div className='d-flex flex-wrap justify-content-between mb-3'>
+                                <p>Alias: Alias2</p>
+                                <button className='copiar ms-3' onClick={() => navigator.clipboard.writeText("Alias2") && setCopiadoE(('Copiado ✅'))}>{copiadoE}</button>
+                            </div>
+                        </div>
+                    </section>
+                    {/* FINAL */}
+                    <section className='final pb-4' ref={finalPage}>
+                        <Postal datosTarjeta={consulta} />
+                    </section>
+
+
+                    <div className={`custom-modal-backdrop ${showModal ? 'mostrar' : 'ocultar'}`} onClick={handleCloseModal}>
+                        <div className="custom-modal-content" onClick={(e) => e.stopPropagation()}>
+                            <div className="custom-modal-header">
+                                <h2 className='mb-0'>Confirmación de asistencia</h2>
+                                <button className="custom-btn-close" onClick={handleCloseModal}><i className="bi bi-chevron-down"></i></button>
+                            </div>
+                            <div className="custom-modal-body">
+                                <ul>
+                                    {grupoFlia.length > 0 ? (
+                                        grupoFlia
+                                            .map(persona => (
+                                                <li key={persona.id}>
+                                                    <p className='nombreVa'>{persona.nickname.normalize()}</p>
+                                                    <div className='justify-content-around'>
                                                         <div className='text-center'>
-                                                            <p className='mb-0 text-center'>Se queda a dormir?</p>
+                                                            <p className='mb-0 text-center'>Asiste?</p>
                                                             <label className="switch-container">
                                                                 <input
                                                                     className="m-2"
                                                                     type="checkbox"
-                                                                    checked={duermeItems[persona.id] || false}
-                                                                    onChange={() => toggleDuerme(persona.id)}
+                                                                    checked={checkedItems[persona.id] || false}
+                                                                    onChange={() => changeStatus(persona.id)}
                                                                 />
-                                                                <span className="sliderCheck dormir" />
+                                                                <span className="sliderCheck festejar" />
                                                             </label>
                                                         </div>
+                                                        {persona.paga === "Alojamiento" && (
+                                                            <div className='d-flex flex-column align-items-center'>
+                                                                <div className='text-center'>
+                                                                    <p className='mb-0 text-center'>Se queda a dormir?</p>
+                                                                    <label className="switch-container">
+                                                                        <input
+                                                                            className="m-2"
+                                                                            type="checkbox"
+                                                                            checked={duermeItems[persona.id] || false}
+                                                                            onChange={() => toggleDuerme(persona.id)}
+                                                                        />
+                                                                        <span className="sliderCheck dormir" />
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                )}
-                                            </div>
-                                            {persona.duerme != null && persona.confirm != null && <p className='text-center'>{persona.nickname}, hemos recibido tu respuesta.<br />Muchas gracias.</p>}
-                                            <hr />
-                                        </li>
-                                    ))
-                            ) : (
-                                <li>No hay personas en este grupo.</li>
-                            )}
-                        </ul>
-                    </div>
-                    <div className="custom-modal-footer">
-                        <span>
-                            Si eres vegetariano o tienes alguna alergia/intolerancia, escribinos por whatsapp
-                        </span>
-                        <div>
-                            <button className='platinum w-100' onClick={handleConfirm}>Confirmar asistencia</button>
-                            {(vaDormir === false || vaDormir === null || (consulta.paga !== 'Alojamiento' && vaDormir === true)) &&
-                                <button type="button" className="platinum w-100 mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    Ver opciones de alojamiento
-                                </button>
-                            }
-                            <div className="modal fade otroAlojamiento" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div className="modal-dialog">
-                                    <div className="modal-content">
-                                        <div className="modal-header">
-                                            <h1 className="modal-title fs-5" id="exampleModalLabel">Les facilitamos la información brindada por el salón</h1>
-                                        </div>
-                                        <div className="modal-body">
-                                            <div>
-                                                <p>Hotel San Pedro</p>
-                                                <div>
-                                                    <a href='tel:03543451305'><i className="bi bi-telephone-fill"></i></a>
-                                                    <a href="https://api.whatsapp.com/send/?phone=54353983292&text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%el%20hospedaje" target='_blank'><i className="bi bi-whatsapp"></i></a>
-                                                    <a href='https://maps.app.goo.gl/jPyf3xvi9GHaJZo18' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
+                                                    {persona.duerme != null && persona.confirm != null && <p className='text-center'>{persona.nickname}, hemos recibido tu respuesta.<br />Muchas gracias.</p>}
+                                                    <hr />
+                                                </li>
+                                            ))
+                                    ) : (
+                                        <li>No hay personas en este grupo.</li>
+                                    )}
+                                </ul>
+                            </div>
+                            <div className="custom-modal-footer">
+                                <span>
+                                    Si eres vegetariano o tienes alguna alergia/intolerancia, escribinos por whatsapp
+                                </span>
+                                <div className='my-2'>
+                                    <button className='platinum w-100' onClick={handleConfirm}>Confirmar asistencia</button>
+                                    {(vaDormir === false || vaDormir === null || (consulta.paga !== 'Alojamiento' && vaDormir === true)) &&
+                                        <button type="button" className="platinum w-100 mt-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            Ver opciones de alojamiento
+                                        </button>
+                                    }
+                                    <div className="modal fade otroAlojamiento" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div className="modal-dialog">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <h1 className="modal-title fs-5" id="exampleModalLabel">Les facilitamos la información brindada por el salón</h1>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <div>
+                                                        <p>Hotel San Pedro</p>
+                                                        <div>
+                                                            <a href='tel:03543451305'><i className="bi bi-telephone-fill"></i></a>
+                                                            <a href="https://api.whatsapp.com/send/?phone=54353983292&text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%el%20hospedaje" target='_blank'><i className="bi bi-whatsapp"></i></a>
+                                                            <a href='https://maps.app.goo.gl/jPyf3xvi9GHaJZo18' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p>Hotel Namuncurá</p>
+                                                        <div>
+                                                            <a href='https://api.whatsapp.com/send/?phone=543543206060&text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%el%20hospedaje' target='_blank'><i className="bi bi-whatsapp"></i></a>
+                                                            <a href='https://maps.app.goo.gl/SpwZasZzUmbhjNWY7' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p>Hotel Asimra y California</p>
+                                                        <div>
+                                                            <a href='https://api.whatsapp.com/send/?phone=5493516301990&text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%el%20hospedaje'><i className="bi bi-whatsapp"></i></a>
+                                                            <a href='https://maps.app.goo.gl/1zPQxqtiQvZJNjMf6' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p>Hotel 27 de marzo</p>
+                                                        <div>
+                                                            <a href='https://maps.app.goo.gl/XjsCWZWuzQrRVioX8' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <p>Cabaña La Matilde</p>
+                                                        <div>
+                                                            <a href='tel:03543452347'><i className="bi bi-telephone-fill"></i></a>
+                                                            <a href='https://maps.app.goo.gl/Mc37Pbffp73F2NW86' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
+                                                        </div>
+                                                    </div>
+                                                    <p>Más información <a href='https://sierraschicas.com/' target='_blank'>aquí</a></p>
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="button" className="platinum w-50" data-bs-dismiss="modal">Cerrar</button>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <p>Hotel Namuncurá</p>
-                                                <div>
-                                                    <a href='https://api.whatsapp.com/send/?phone=543543206060&text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%el%20hospedaje' target='_blank'><i className="bi bi-whatsapp"></i></a>
-                                                    <a href='https://maps.app.goo.gl/SpwZasZzUmbhjNWY7' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <p>Hotel Asimra y California</p>
-                                                <div>
-                                                    <a href='https://api.whatsapp.com/send/?phone=5493516301990&text=Hola%2C%20quisiera%20informaci%C3%B3n%20sobre%el%20hospedaje'><i className="bi bi-whatsapp"></i></a>
-                                                    <a href='https://maps.app.goo.gl/1zPQxqtiQvZJNjMf6' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <p>Hotel 27 de marzo</p>
-                                                <div>
-                                                    <a href='https://maps.app.goo.gl/XjsCWZWuzQrRVioX8' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <p>Cabaña La Matilde</p>
-                                                <div>
-                                                    <a href='tel:03543452347'><i className="bi bi-telephone-fill"></i></a>
-                                                    <a href='https://maps.app.goo.gl/Mc37Pbffp73F2NW86' target='_blank'><i className="bi bi-geo-alt-fill"></i></a>
-                                                </div>
-                                            </div>
-                                            <p>Más información <a href='https://sierraschicas.com/' target='_blank'>aquí</a></p>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="platinum w-50" data-bs-dismiss="modal">Cerrar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                </>
+            }
         </>
     );
 };
