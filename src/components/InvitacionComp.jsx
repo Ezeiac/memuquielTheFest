@@ -379,7 +379,6 @@ export const InvitacionComp = ({ datosOk, connect }) => {
         return () => window.removeEventListener('scroll', manejarScroll);
     }, []);
 
-
     const now = Date.now()
     const deadLine = new Date(2030, 9, 1)
 
